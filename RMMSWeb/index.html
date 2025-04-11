@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>RMMS Web</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="css/bootswatch/united.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/60991e3d6f.js" crossorigin="anonymous"></script>
     <script src="js/device.js"></script>
@@ -58,7 +58,7 @@
             display: normal;
             z-index: 100001;
             border-radius: 8px;
-            width: 600px;
+            width: 400px;
             height: 400px;
             left: 25px;
             background-color: #f3f3f3;
@@ -74,7 +74,7 @@
             display: normal;
             z-index: 100001;
             border-radius: 6px;
-            width: 600px;
+            width: 400px;
             height: 400px;
             left: 25px;
             background-color: #f3f3f3;
@@ -201,8 +201,16 @@
     -->
     <div id="WebDesktop" style="display:normal">
         <div id="userProfile" style="width: 80px;position: fixed; top: 50px; left: 50px; color: white">
-            <div style="width:100%;"><i class="fa-solid fa-circle-user" onclick="showPages('profile')"></i></div>
+            <div style="width:100%;"><i class="fa-solid fa-circle-user fa-2xl" onclick="showPages('profile')"></i></div>
             <span style="width: 100%;font-size: 10px">User Profile</span>
+        </div>
+        <div id="sell" style="width: 80px;position: fixed; top: 150px; left: 50px; color: white">
+            <div style="width:100%;"><i class="fa-solid fa-receipt fa-2xl" onclick="showPages('sell')"></i></div>
+            <span style="width: 100%;font-size: 10px">Sell</span>
+        </div>
+        <div id="waybill" style="width: 80px;position: fixed; top: 250px; left: 50px; color: white">
+            <div style="width:100%;"><i class="fa-solid fa-truck fa-2xl" onclick="showPages('ewaybill')"></i></div>
+            <span style="width: 100%;font-size: 10px">eWay Bill</span>
         </div>
         
         <div id="minimizeBar" class="taskbar Z1002" style="width:100%;height:55px;position:fixed;bottom:0px;">
@@ -216,8 +224,8 @@
             </div>
             <hr />
             <div style="margin-left:20px" class="btn-group-vertical">
-                <button type="button" class="btn btn-outline-secondary" id="startButton" style="text-align:left;color:black"><i class="fa-solid fa-circle-user"></i>&nbsp; User Profile</button>
-               
+                <button type="button" onclick="showPages('profile');ShowStart()" class="btn btn-outline-secondary" style="text-align:left;color:black"><i class="fa-solid fa-circle-user fa-lg"></i>&nbsp; User Profile</button>
+                <button type="button" onclick="showPages('sell');ShowStart()" class="btn btn-outline-secondary" style="text-align:left;color:black"><i class="fa-solid fa-receipt fa-lg"></i>&nbsp; Sell</button>
             </div>
         </div>
     </div>
@@ -681,9 +689,16 @@
             $(`#${newFrame.id}`).show();
             $(`#${newFrame.id}`).draggable();
             setTimeout(function () {               
-                $('#iframe_' + newFrame.id).attr('src', newFrame.src)
+            $('#iframe_' + newFrame.id).attr('src', newFrame.src)
             }, 1000);
         }
+
+        // Allow access to createFrame from iframe
+        window.addEventListener("message", function(event) {
+            if (event.origin === window.location.origin && event.data.action === "createFrame") {
+                createFrame(event.data.frameObject);
+            }
+        });
 
         function maximizeFrame(frame) {
             let meWindowPane = getFrame(stateManager.windowPanesCollection, frame);

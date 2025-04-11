@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Sell Transaction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Optional: Link to external CSS -->
+</head>
+<body class="container">
+    <form action="/submit-sell-transaction" method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="itemName" class="form-label">Item Name:</label>
+            <div class="row">
+                <div class="col-6">
+                    <select id="itemName" name="itemName" class="form-control select2" required>
+                        <option value="">Select an item</option>
+                        <option value="item1">Item 1</option>
+                        <option value="item2">Item 2</option>
+                        <option value="item3">Item 3</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <select id="subItemName" name="subItemName" class="form-control select2" required>
+                        <option value="">Select a sub-item</option>
+                        <option value="subItem1">Sub Item 1</option>
+                        <option value="subItem2">Sub Item 2</option>
+                        <option value="subItem3">Sub Item 3</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity:</label>
+            <div class="row">
+                <div class="col-7">
+                    <div class="input-group">
+                        <span class="input-group-text">⚖️</span>
+                        <input type="number" id="quantity" name="quantity" class="form-control" min="1" required placeholder="Enter quantity">
+                    </div>
+                </div>
+                <div class="col-5">
+                    <select id="quantityUnit" name="quantityUnit" class="form-control select2" required>
+                        <option value="quantal">Quantal</option>
+                        <option value="ton">Ton</option>
+                        <option value="kg">KG</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-7">
+                    <label for="price" class="form-label">Price per Unit:</label>
+                    <div class="input-group">
+                        <span class="input-group-text">₹</span>
+                        <input type="number" id="price" name="price" class="form-control" step="0.01" required placeholder="Enter price">
+                    </div>
+                </div>
+                <div class="col-5">
+                    <label for="gst" class="form-label">GST (%):</label>
+                    <select id="gst" name="gst" class="form-control select2" required onchange="updateTotalPrice()">
+                        <option value="0">0%</option>
+                        <option value="5">5%</option>
+                        <option value="10">10%</option>
+                        <option value="18">18%</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="totalPrice" class="form-label">Total Price:</label>
+            <div class="input-group">
+            <span class="input-group-text">₹</span>
+            <input type="text" id="totalPrice" name="totalPrice" class="form-control" readonly style="background-color: #f8f9fa; color: #6c757d;">
+            </div>
+            <div class="form-text">
+            <strong id="totalPriceDisplay">Total Price: ₹0.00</strong>
+            <br>
+            <em id="totalPriceInWords">Total Price in Words: Zero Rupees Only</em>
+            </div>
+        </div>
+
+        <script>
+             const quantityInput = document.getElementById('quantity');
+             const priceInput = document.getElementById('price');
+
+            function updateTotalPrice() {
+            const totalPriceInput = document.getElementById('totalPrice');
+            const totalPriceDisplay = document.getElementById('totalPriceDisplay');
+            const gstSelection = document.getElementById('gst');
+
+
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const price = parseFloat(priceInput.value) || 0;
+            const totalPrice = quantity * price;
+
+            totalPriceInput.value = totalPrice.toFixed(2);
+            if (parseFloat(gstSelection.value) === 0) {
+                totalPriceDisplay.textContent = `Total Price: ₹${totalPrice.toFixed(2)}`;
+            } else {
+                const gstAmount = totalPrice * (parseFloat(gstSelection.value) / 100);
+                const totalWithGst = totalPrice + gstAmount;
+                totalPriceDisplay.textContent = `Total Price: ₹${totalPrice.toFixed(2)} + GST: ₹${gstAmount.toFixed(2)} = ₹${totalWithGst.toFixed(2)}`;
+            }
+            }
+            function numberToWords(num) {
+                const a = [
+                    '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+                    'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+                ];
+                const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+                if (num === 0) return 'Zero';
+                if (num < 20) return a[num];
+                if (num < 100) return b[Math.floor(num / 10)] + (num % 10 !== 0 ? ' ' + a[num % 10] : '');
+                if (num < 1000) return a[Math.floor(num / 100)] + ' Hundred' + (num % 100 !== 0 ? ' and ' + numberToWords(num % 100) : '');
+                if (num < 100000) return numberToWords(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 !== 0 ? ' ' + numberToWords(num % 1000) : '');
+                if (num < 10000000) return numberToWords(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 !== 0 ? ' ' + numberToWords(num % 100000) : '');
+                return numberToWords(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 !== 0 ? ' ' + numberToWords(num % 10000000) : '');
+            }
+
+            function updateTotalPriceInWords() {
+                const totalPriceInput = document.getElementById('totalPrice');
+                const totalPriceInWords = document.getElementById('totalPriceInWords');
+
+                const quantity = parseFloat(quantityInput.value) || 0;
+                const price = parseFloat(priceInput.value) || 0;
+                const gstSelection = document.getElementById('gst');
+                const gstRate = parseFloat(gstSelection.value) || 0;
+
+                const totalPrice = quantity * price;
+                const gstAmount = totalPrice * (gstRate / 100);
+                const totalWithGst = totalPrice + gstAmount;
+
+                const totalPriceWords = numberToWords(Math.floor(totalWithGst)) + ' Rupees Only';
+                totalPriceInWords.textContent = `Total Price in Words: ${totalPriceWords}`;
+            }
+
+            quantityInput.addEventListener('input', updateTotalPriceInWords);
+            priceInput.addEventListener('input', updateTotalPriceInWords);
+            document.getElementById('gst').addEventListener('change', updateTotalPriceInWords);
+            quantityInput.addEventListener('input', updateTotalPrice);
+            priceInput.addEventListener('input', updateTotalPrice);
+        </script>
+        <div class="mb-5">
+            <label for="buyerName" class="form-label">Buyer Name:</label>
+            <select id="buyerName" name="buyerName" class="form-select select2" required>
+                <option value="">Select a buyer</option>
+                <option value="buyer3" data-subtext="Address: Address of Buyer 3, Mobile: 1234567890">Name: Buyer 3</option>
+                <option value="buyer4" data-subtext="Address: Address of Buyer 4, Mobile: 9876543210">Name: Buyer 4</option>
+                <option value="buyer5" data-subtext="Address: Address of Buyer 5, Mobile: 1122334455">Name: Buyer 5</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="transactionDate" class="form-label">Transaction Date:</label>
+            <input type="date" id="transactionDate" name="transactionDate" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" onclick="handleSubmit(event)">Add Transaction</button>
+
+        <script>
+            function handleSubmit(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const form = event.target.closest('form');
+            const formData = new FormData(form);
+
+            const jsonObject = {};
+            formData.forEach((value, key) => {
+                jsonObject[key] = value;
+            });
+            jsonObject['gstAmount'] = parseFloat((jsonObject['quantity'] * jsonObject['price']) * (jsonObject['gst'] / 100)).toFixed(2);
+            jsonObject['totalAfterGst'] = parseFloat((jsonObject['quantity'] * jsonObject['price']) + parseFloat(jsonObject['gstAmount'])).toFixed(2);
+
+            //alert(JSON.stringify(jsonObject, null, 2)); // Show JSON object as alert
+
+            let frameObject = {};
+            frameObject.applicationName = 'framewithoutfilter';
+            frameObject.title = "E-Waybill";
+            frameObject.pageName = "ewaybill";
+            if (typeof parent.createFrame === 'function') {
+                parent.createFrame(frameObject);
+            } else {
+                console.error('createFrame function is not accessible or defined in the parent frame.');
+            }
+            // Here you can send the JSON object to your server using fetch or XMLHttpRequest      
+            }
+        </script>
+    </form>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#buyerName').select2({
+                templateResult: function(data) {
+                    if (!data.id) {
+                        return data.text;
+                    }
+                    const subtext = $(data.element).data('subtext');
+                    const $result = $('<span></span>');
+                    $result.append('<span>' + data.text + '</span>');
+                    if (subtext) {
+                        $result.append('<br><small style="color: gray;">' + subtext + '</small>');
+                    }
+                    return $result;
+                },
+                templateSelection: function(data) {
+                    const subtext = $(data.element).data('subtext');
+                    if (subtext) {
+                        return $('<span>' + data.text + '<br><small style="color: gray;">' + subtext + '</small></span>');
+                    }
+                    return data.text;
+                },
+                escapeMarkup: function(markup) {
+                    return markup; // Allow HTML markup
+                }
+            });
+        });
+    </script>
+</body>
+</html>
