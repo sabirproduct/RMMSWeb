@@ -2,7 +2,13 @@
 const express = require('express');
 const app = express();
 const db = require('./firebase');
+const cors = require('cors');
+
+
+app.use(cors()); // Allow all origins (you can restrict later)
 app.use(express.json());
+
+
 
 app.get('/api/users', async (req, res) => {
   const ref = db.ref('users');
