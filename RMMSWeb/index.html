@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>RMMS Web</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     <link href="css/bootswatch/united.css" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/a4984d79d1.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/60991e3d6f.js" crossorigin="anonymous"></script>
     <script src="js/device.js"></script>
     <script src="js/frame.js?ver"></script>
     <script src="js/frames.js"></script>
@@ -200,40 +200,13 @@
 
     -->
     <div id="WebDesktop" style="display:normal">
-        <div id="shortcutMemberLogin" style="width: 80px;position: fixed; top: 50px; left: 250px; color: white">
-            <div style="width:100%;"><i style="color:white" class="fa-duotone fa-user" id="shortcutIcon"></i></div>
-            <span style="width: 100%;font-size: 10px">Member Login</span>
+        <div id="userProfile" style="width: 80px;position: fixed; top: 50px; left: 50px; color: white">
+            <div style="width:100%;"><i class="fa-solid fa-circle-user" onclick="showPages('profile')"></i></div>
+            <span style="width: 100%;font-size: 10px">User Profile</span>
         </div>
-        <div id="shortcutCreateProfile" style="width: 80px; position: fixed; top: 50px; left: 50px;">
-            <div style="width:100%;"><i class="fa-duotone fa-address-card" id="shortcutIcon0"></i></div>
-            <span style="width: 100%;font-size: 10px">Create Profile</span>
-        </div>
-        <div id="shortcutFindPensionAnalyst" style="width:80px; position:fixed;top:150px;left:50px">
-            <div style="width:100%">
-                <i class="fa-duotone fa-users-viewfinder" id="shortcutIcon1"></i>
-            </div>
-            <span style="width:80px;font-size:10px">Find Advisor</span>
-        </div>
-        <div id="shortcutFindPortfolioManager" style="width:80px; position:fixed;top:250px;left:50px">
-            <div style="width:100%">
-                <i class="fa-duotone fa-radar" id="shortcutIcon2"></i>
-            </div>
-            <span style="width:80px;font-size:10px">Find Portfolio</span>
-        </div>
-        <div id="shortcutAboutAmericansRetirement" style="width:80px; position:fixed;top:350px;left:50px">
-            <div style="width:100%"><i class="fa-duotone fa-flag-usa" id="shortcutIcon3"></i></div>
-            <span style="width:80px;font-size:10px">About Platform</span>
-        </div>
-        <div id="shortcutAssetAllocationBaseModels" onclick="showVideoMeeting()" style="width:80px; position:fixed;top:450px;left:50px">
-            <div style="width:100%"><i style="color:white" class="fa-duotone fa-pie-chart" id="shortcutIcon4"></i></div>
-            <span style="width:80px;font-size:10px;color:white">Asset Allocations</span>
-        </div>
-        <div id="shortcutVideoMeeting_AdHoc" style="width:80px; position:fixed;top:450px;left:250px">
-            <div style="width:100%"><i style="color:white" class="fad fa-video" id="shortcutIcon5"></i></div>
-            <span style="width:80px;font-size:10px;color:white">Video Meeting</span>
-        </div>
+        
         <div id="minimizeBar" class="taskbar Z1002" style="width:100%;height:55px;position:fixed;bottom:0px;">
-            <div style="margin-top:0px;position:absolute;left:10px" class="" id="button4"  onclick="ShowStart()"><img style="" width="55" src="content/images/frames_start_50.png"/></div>
+            <div style="margin-top:0px;position:absolute;left:10px" class="" id="button4"  onclick="ShowStart()"><img width="55" src="content/images/frames_start_50.png"/></div>
             <button style="margin-top: 5px; position: absolute; left: 150px; opacity: 1; background-color: #f3f3f3" class="button button3" id="button5"><i style="color:black" class="fa-duotone fa-eye-slash"></i></button>
             <button style="margin-top: 5px; position: absolute; left: 220px; opacity: 1; background-color: #f3f3f3" class="button button3" id="button6"><i style="color:black" class="fa-duotone fa-eye"></i></button>
         </div>
@@ -243,14 +216,8 @@
             </div>
             <hr />
             <div style="margin-left:20px" class="btn-group-vertical">
-                <button type="button" class="btn btn-outline-secondary" id="startButton" style="text-align:left;color:black"><i class="fa-solid fa-user"></i>&nbsp; Member Login</button>
-                <button type="button" class="btn btn-outline-secondary" id="startButton0" style="text-align:left;color:black"><i class="fa-duotone fa-address-card"></i>&nbsp; Create Profile</button>
-                <button type="button" class="btn btn-outline-secondary" id="startButton1" style="text-align:left;color:black"><i class="far fa-flag-usa"></i>&nbsp; Americans Retirement</button>
-                <button type="button" class="btn btn-outline-secondary" id="startButton2" style="text-align:left;color:black"><i class="far fa-user-chart"></i>&nbsp; Risk Assessment</button>
-                <button type="button" class="btn btn-outline-secondary" id="startButton3" style="text-align:left;color:black"><i class="fa-duotone fa-bullseye-arrow"></i>&nbsp; About Minuteman</button>
-                <button type="button" class="btn btn-outline-secondary" id="startButton4" style="text-align:left;color:black"><i class="fa-duotone fa-users-viewfinder"></i>&nbsp; Personal Pension Analysts</button>
-                <button type="button" class="btn btn-outline-secondary" id="startButton5" style="text-align:left;color:black"><i class="fa-duotone fa-radar"></i>&nbsp; Portfolio Model Managers</button>
-                <button type="button" class="btn btn-outline-secondary" id="startButton7" style="text-align:left;color:black"><i class="fa-duotone fa-chart-line-up"></i>&nbsp; Platform Securities</button>
+                <button type="button" class="btn btn-outline-secondary" id="startButton" style="text-align:left;color:black"><i class="fa-solid fa-circle-user"></i>&nbsp; User Profile</button>
+               
             </div>
         </div>
     </div>
@@ -327,21 +294,10 @@
             //    public string jTag { set; get; } = string.Empty;
             $('#WebDesktop').show();
         }
-
-
-        stateManager.assetAllocationBaseModels = null;
-
-        function getAssetAllocationBaseModels() {
-            return stateManager.assetAllocationBaseModels;
-        }
-
-        function setAssetAllocationBaseModels(assetAllocationBaseModels) {
-            stateManager.assetAllocationBaseModels = JSON.parse(assetAllocationBaseModels);
-        }
+      
 
         stateManager.keys = {};
         stateManager.keys.customerProfile = 'customerProfile';
-        stateManager.keys.assetAllocationBaseModels = 'getAssetAllocationBaseModels';
 
         function Post2Server(jsonObject, key) {
             let url = `?jsonObject=${jsonObject}`;
@@ -698,85 +654,15 @@
         function changeZIndex(frame) {
             $("#" + frame).css('z-index', getNewTopFrameZIndex());
         }
-        function showAmericansRetirement() {
+        
+        function showPages(page) {
             let frameObject = {};
-            frameObject.applicationName = 'americansRetirement';
-            frameObject.title = 'Americans Retirement';
+            frameObject.applicationName = 'framewithoutfilter';
+            frameObject.title = page;
+            frameObject.pageName = page;
             createFrame(frameObject);
         }
 
-        function showRiskAssessment() {
-            let frameObject = {};
-            frameObject.applicationName = 'riskAssessment';
-            frameObject.title = 'Risk Assessment';
-            createFrame(frameObject);
-        }
-
-
-        function showSelectModel() {
-            let frameObject = {};
-            frameObject.applicationName = 'selectModel';
-            frameObject.title = 'Select Model';
-            createFrame(frameObject);
-        }
-
-        function showSelectAdvisor() {
-            let frameObject = {};
-            frameObject.applicationName = 'selectAdvisor';
-            frameObject.title = 'Select Advisor';
-            createFrame(frameObject);
-        }
-    
-        function showShowBiztalk(id,epoint,title) {
-            let frameObject = {};
-            frameObject.applicationName = 'showBiztalk';
-            frameObject.title = (title == null || title == undefined)?'Biztalk':title; 
-            frameObject.id = id;
-            frameObject.epoint = epoint;
-            createFrame(frameObject);
-        }
-
-        function showViewEquities() {
-            let frameObject = {};
-            frameObject.applicationName = 'viewEquities';
-            frameObject.title = 'Platform Equities';
-            createFrame(frameObject);
-        }
-
-        function showCreateProfile() {
-            let frameObject = {};
-            frameObject.applicationName = 'createProfile';
-            frameObject.title = 'Create Profile';
-            createFrame(frameObject);
-        }
-
-        function showMemberLogin() {
-            let frameObject = {};
-            frameObject.applicationName = 'memberLogin';
-            frameObject.title = 'Member Login';
-            createFrame(frameObject);
-        }
-
-        function showAssetAllocationBaseModels() {
-            let frameObject = {};
-            frameObject.applicationName = 'assetAllocationBaseModels';
-            frameObject.title = 'Asset Allocation Base Models';
-            createFrame(frameObject);
-        }
-
-        function showAssetAllocationBaseModelChart() {
-            let frameObject = {};
-            frameObject.applicationName = 'assetAllocationBaseModelChart';
-            frameObject.title = 'Asset Allocation Chart';
-            createFrame(frameObject);
-        }
-
-        function showVideoMeeting() {
-            let frameObject = {};
-            frameObject.applicationName = 'videoMeeting';
-            frameObject.title = 'Video Meeting';
-            createFrame(frameObject);
-        }
 
         function createFrame(FrameObject) {
             let newFrame = new Frame(FrameObject);
@@ -798,8 +684,6 @@
                 $('#iframe_' + newFrame.id).attr('src', newFrame.src)
             }, 1000);
         }
-
-
 
         function maximizeFrame(frame) {
             let meWindowPane = getFrame(stateManager.windowPanesCollection, frame);
@@ -831,7 +715,6 @@
                 $(`#iconFrameMaximize_${frame}`).removeClass('fa-window-restore').addClass('fa-window-maximize');
             }
         }
-
 
         function minimizeFrame(frame) {
             $(`#${frame}`).hide();
