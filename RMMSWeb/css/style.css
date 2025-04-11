@@ -1,0 +1,219 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    /* background-image: url('bg.jpeg'); 
+    background-size: cover; */
+    overflow: hidden;
+    height: 100vh;
+}
+
+.taskbar {
+    background-color: #f3f3f3;
+    width: 100%;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    z-index: 100002;
+    justify-content: center;
+}
+
+.startmenu{
+    position: absolute; 
+    /* bottom: 50px; */
+    bottom: -655px;
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease-in; 
+}
+
+.startmenu img{
+    border-radius: 8px;
+}
+
+.right{
+    justify-self: flex-end;
+    position: absolute;
+    right: 0;
+    margin: 6px 0;
+    height: 85%;
+}  
+.icons{
+    color: white;
+}
+.Z0 {
+    z-index: 0;
+}
+
+.Z5 {
+    z-index: 5;
+}
+
+.Z10 {
+    z-index: 10;
+}
+
+.Z15 {
+    z-index: 15;
+}
+
+.Z20 {
+    z-index: 20;
+}
+
+.Z1001 {
+    z-index: 1001;
+}
+
+.Z1002 {
+    z-index: 1002;
+}
+
+body {
+    font-family: 'Roboto', serif;
+    font-size: 24px;
+}
+
+.moveTop {
+    z-index: 5001 !important;
+}
+
+.startMenuShow {
+    display: normal;
+    z-index: 100001;
+    border-radius: 8px;
+    width: 600px;
+    height: 400px;
+    left: 25px;
+    background-color: #f3f3f3;
+    border: 2px solid black;
+    position: absolute;
+    animation-name: startShow;
+    animation-duration: 1s;
+    animation-delay: 0s;
+    animation-fill-mode: both;
+}
+
+.startMenuHide {
+    display: normal;
+    z-index: 100001;
+    border-radius: 6px;
+    width: 600px;
+    height: 400px;
+    left: 25px;
+    background-color: #f3f3f3;
+    border: 2px solid black;
+    position: absolute;
+    animation-name: startHide;
+    animation-duration: 1s;
+    animation-delay: 0s;
+    animation-fill-mode: both;
+}
+
+@keyframes startShow {
+    from {
+        bottom: -600px;
+    }
+
+    to {
+        bottom: 60px;
+    }
+}
+
+@keyframes startHide {
+    from {
+        bottom: 60px;
+    }
+
+    to {
+        bottom: -600px;
+    }
+}
+
+.btnGroup {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.startMenuButton {
+    display: block;
+    width: 100%;
+    margin: 0px;
+    border: none;
+    padding: 5px;
+}
+
+startMenuButton:not(:last-child) {
+}
+
+.ui-dialog {
+    z-index: 1000 !important;
+}
+
+.ui-dialog-title {
+    color: #FFFFFF !important;
+}
+
+#maskLayout {
+    display: none;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+    min-height: 500px;
+    background-color: black;
+    position: absolute;
+    top: 0px;
+    z-index: 99999;
+}
+
+.popup {
+    display: none;
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    background-color: white;
+    z-index: 100000;
+}
+
+.shadow {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.backgrd {
+}
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 0px 0px;
+    cursor: pointer;
+}
+
+.button1 {
+    border-radius: 2px;
+}
+
+.button2 {
+    border-radius: 4px;
+}
+
+.button3 {
+    border-radius: 8px;
+}
+
+.button4 {
+    border-radius: 12px;
+}
+
+.button5 {
+    border-radius: 50%;
+}

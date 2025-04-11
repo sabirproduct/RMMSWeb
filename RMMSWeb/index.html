@@ -1,0 +1,849 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <link href="css/bootswatch/united.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/a4984d79d1.js" crossorigin="anonymous"></script>
+    <script src="js/device.js"></script>
+    <script src="js/frame.js?ver"></script>
+    <script src="js/frames.js"></script>
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+<body style="overflow-y: hidden; background-image: url('content/images/vectorstock_bg.png');background-size:cover">
+    <style>
+        .Z0 {
+            z-index: 0;
+        }
+
+        .Z5 {
+            z-index: 5;
+        }
+
+        .Z10 {
+            z-index: 10;
+        }
+
+        .Z15 {
+            z-index: 15;
+        }
+
+        .Z20 {
+            z-index: 20;
+        }
+
+        .Z1001 {
+            z-index: 1001;
+        }
+
+        .Z1002 {
+            z-index: 1002;
+        }
+
+        body {
+            font-family: 'Roboto', serif;
+            font-size: 24px;
+        }
+
+        .moveTop {
+            z-index: 5001 !important;
+        }
+
+        .startMenuShow {
+            display: normal;
+            z-index: 100001;
+            border-radius: 8px;
+            width: 600px;
+            height: 400px;
+            left: 25px;
+            background-color: #f3f3f3;
+            border: 2px solid black;
+            position: absolute;
+            animation-name: startShow;
+            animation-duration: 1s;
+            animation-delay: 0s;
+            animation-fill-mode: both;
+        }
+
+        .startMenuHide {
+            display: normal;
+            z-index: 100001;
+            border-radius: 6px;
+            width: 600px;
+            height: 400px;
+            left: 25px;
+            background-color: #f3f3f3;
+            border: 2px solid black;
+            position: absolute;
+            animation-name: startHide;
+            animation-duration: 1s;
+            animation-delay: 0s;
+            animation-fill-mode: both;
+        }
+
+        @keyframes startShow {
+            from {
+                bottom: -600px;
+            }
+
+            to {
+                bottom: 60px;
+            }
+        }
+
+        @keyframes startHide {
+            from {
+                bottom: 60px;
+            }
+
+            to {
+                bottom: -600px;
+            }
+        }
+
+        .btnGroup {
+            display: inline-block;
+            margin-left: 20px;
+        }
+
+        .startMenuButton {
+            display: block;
+            width: 100%;
+            margin: 0px;
+            border: none;
+            padding: 5px;
+        }
+
+        startMenuButton:not(:last-child) {
+        }
+
+        .ui-dialog {
+            z-index: 1000 !important;
+        }
+
+        .ui-dialog-title {
+            color: #FFFFFF !important;
+        }
+
+        #maskLayout {
+            display: none;
+            width: 100%;
+            height: 100%;
+            opacity: 0.2;
+            min-height: 500px;
+            background-color: black;
+            position: absolute;
+            top: 0px;
+            z-index: 99999;
+        }
+
+        .popup {
+            display: none;
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            background-color: white;
+            z-index: 100000;
+        }
+
+        .shadow {
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        }
+
+        .backgrd{
+
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 0px 0px;
+            cursor: pointer;
+        }
+
+        .button1 {
+            border-radius: 2px;
+        }
+
+        .button2 {
+            border-radius: 4px;
+        }
+
+        .button3 {
+            border-radius: 8px;
+        }
+
+        .button4 {
+            border-radius: 12px;
+        }
+
+        .button5 {
+            border-radius: 50%;
+        }
+    </style>
+    <!--
+    The key to the frames display is to manage the z-index values. the algorithm for z-index values will be as follows
+        the z-index layer for popups will be between 40000-49999
+        the 1st frame will launch at 40000 and then each subsequent popup will be shown at the value of last
+        shown z-index +1.
+
+    -->
+    <div id="WebDesktop" style="display:normal">
+        <div id="shortcutMemberLogin" style="width: 80px;position: fixed; top: 50px; left: 250px; color: white">
+            <div style="width:100%;"><i style="color:white" class="fa-duotone fa-user" id="shortcutIcon"></i></div>
+            <span style="width: 100%;font-size: 10px">Member Login</span>
+        </div>
+        <div id="shortcutCreateProfile" style="width: 80px; position: fixed; top: 50px; left: 50px;">
+            <div style="width:100%;"><i class="fa-duotone fa-address-card" id="shortcutIcon0"></i></div>
+            <span style="width: 100%;font-size: 10px">Create Profile</span>
+        </div>
+        <div id="shortcutFindPensionAnalyst" style="width:80px; position:fixed;top:150px;left:50px">
+            <div style="width:100%">
+                <i class="fa-duotone fa-users-viewfinder" id="shortcutIcon1"></i>
+            </div>
+            <span style="width:80px;font-size:10px">Find Advisor</span>
+        </div>
+        <div id="shortcutFindPortfolioManager" style="width:80px; position:fixed;top:250px;left:50px">
+            <div style="width:100%">
+                <i class="fa-duotone fa-radar" id="shortcutIcon2"></i>
+            </div>
+            <span style="width:80px;font-size:10px">Find Portfolio</span>
+        </div>
+        <div id="shortcutAboutAmericansRetirement" style="width:80px; position:fixed;top:350px;left:50px">
+            <div style="width:100%"><i class="fa-duotone fa-flag-usa" id="shortcutIcon3"></i></div>
+            <span style="width:80px;font-size:10px">About Platform</span>
+        </div>
+        <div id="shortcutAssetAllocationBaseModels" onclick="showVideoMeeting()" style="width:80px; position:fixed;top:450px;left:50px">
+            <div style="width:100%"><i style="color:white" class="fa-duotone fa-pie-chart" id="shortcutIcon4"></i></div>
+            <span style="width:80px;font-size:10px;color:white">Asset Allocations</span>
+        </div>
+        <div id="shortcutVideoMeeting_AdHoc" style="width:80px; position:fixed;top:450px;left:250px">
+            <div style="width:100%"><i style="color:white" class="fad fa-video" id="shortcutIcon5"></i></div>
+            <span style="width:80px;font-size:10px;color:white">Video Meeting</span>
+        </div>
+        <div id="minimizeBar" class="taskbar Z1002" style="width:100%;height:55px;position:fixed;bottom:0px;">
+            <div style="margin-top:0px;position:absolute;left:10px" class="" id="button4"  onclick="ShowStart()"><img style="" width="55" src="content/images/frames_start_50.png"/></div>
+            <button style="margin-top: 5px; position: absolute; left: 150px; opacity: 1; background-color: #f3f3f3" class="button button3" id="button5"><i style="color:black" class="fa-duotone fa-eye-slash"></i></button>
+            <button style="margin-top: 5px; position: absolute; left: 220px; opacity: 1; background-color: #f3f3f3" class="button button3" id="button6"><i style="color:black" class="fa-duotone fa-eye"></i></button>
+        </div>
+        <div id="startMenu" class="Z1001 shadow" style="display: none; background-color: #f3f3f3; ">
+            <div style="background-color: #f3f3f3; width:100%;">
+                <h3 style="margin-left: 20px; margin-top: 10px;">Applications</h3>
+            </div>
+            <hr />
+            <div style="margin-left:20px" class="btn-group-vertical">
+                <button type="button" class="btn btn-outline-secondary" id="startButton" style="text-align:left;color:black"><i class="fa-solid fa-user"></i>&nbsp; Member Login</button>
+                <button type="button" class="btn btn-outline-secondary" id="startButton0" style="text-align:left;color:black"><i class="fa-duotone fa-address-card"></i>&nbsp; Create Profile</button>
+                <button type="button" class="btn btn-outline-secondary" id="startButton1" style="text-align:left;color:black"><i class="far fa-flag-usa"></i>&nbsp; Americans Retirement</button>
+                <button type="button" class="btn btn-outline-secondary" id="startButton2" style="text-align:left;color:black"><i class="far fa-user-chart"></i>&nbsp; Risk Assessment</button>
+                <button type="button" class="btn btn-outline-secondary" id="startButton3" style="text-align:left;color:black"><i class="fa-duotone fa-bullseye-arrow"></i>&nbsp; About Minuteman</button>
+                <button type="button" class="btn btn-outline-secondary" id="startButton4" style="text-align:left;color:black"><i class="fa-duotone fa-users-viewfinder"></i>&nbsp; Personal Pension Analysts</button>
+                <button type="button" class="btn btn-outline-secondary" id="startButton5" style="text-align:left;color:black"><i class="fa-duotone fa-radar"></i>&nbsp; Portfolio Model Managers</button>
+                <button type="button" class="btn btn-outline-secondary" id="startButton7" style="text-align:left;color:black"><i class="fa-duotone fa-chart-line-up"></i>&nbsp; Platform Securities</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        let myDevice = new Device("index");
+        /// state manager object declaration
+        let stateManager = {};
+        /// z-index frame top
+        stateManager.zIndex = 20000;
+        function getTopFrameZIndex() {
+            return stateManager.zIndex;
+        }
+        function setTopFrameZIndex() {
+            stateManager.zIndex = stateManager.zIndex + 1;
+        }
+        function getNewTopFrameZIndex() {
+            setTopFrameZIndex();
+            return stateManager.zIndex;
+        }
+        /// true|false
+        stateManager.startButtonState = false;
+        /// windowPaneObjects
+        stateManager.windowPanesCollection = [];
+        /// dialog Colors Collection
+        stateManager.windowPaneColorCollection = [];
+
+        function colorObject(hexColor) {
+            let colored = {};
+            colored.hexColor = hexColor;
+            colored.inUse = false;
+            return colored;
+        }
+
+        /// get a UUID
+        function GetUUID() {
+            return myDevice.GenerateUUID();
+        }
+
+        /// cachedVar
+        let cachedVar = {};
+        cachedVar.id = 25;
+
+        function getCachedVar() {
+            return cachedVar;
+        }
+
+        function setCachedVar(cachedvar) {
+            cachedVar = cachedvar;
+        }
+
+        //member aka customer profile
+        //initialize as null;
+        stateManager.customerProfile = null;
+
+        function getCustomerProfile() {
+            return stateManager.customerProfile;
+        }
+        function setCustomerProfile(customerProfile) {
+            stateManager.customerProfile = JSON.parse(customerProfile);
+            setUserProfileFunctionality();
+        }
+
+        //set funct for parsing the json
+        function setUserProfileFunctionality() {
+            //object properties
+            //    public Int64 Id { set; get; } = 0;
+            //    public string FirstName { set; get; } = string.Empty;
+            //    public string LastName { set; get; } = string.Empty;
+            //    public string Email { set; get; } = string.Empty;
+            //    public string Password { set; get; } = string.Empty;
+            //    public Int16 Age { set; get; } = 0;
+            //    public string Focus { set; get; } = string.Empty;
+            //    public string Description { set; get; } = string.Empty;
+            //    public string jTag { set; get; } = string.Empty;
+            $('#WebDesktop').show();
+        }
+
+
+        stateManager.assetAllocationBaseModels = null;
+
+        function getAssetAllocationBaseModels() {
+            return stateManager.assetAllocationBaseModels;
+        }
+
+        function setAssetAllocationBaseModels(assetAllocationBaseModels) {
+            stateManager.assetAllocationBaseModels = JSON.parse(assetAllocationBaseModels);
+        }
+
+        stateManager.keys = {};
+        stateManager.keys.customerProfile = 'customerProfile';
+        stateManager.keys.assetAllocationBaseModels = 'getAssetAllocationBaseModels';
+
+        function Post2Server(jsonObject, key) {
+            let url = `?jsonObject=${jsonObject}`;
+            const result = $.ajax({
+                method: "GET",
+                url: url,
+                async: false,
+                beforeSend: function (xhr, settings) {
+
+                },
+                error: function (xhr, exception) {
+                    alert(exception);
+                },
+                dataFilter: function (data, type) {
+
+                },
+                success: function (data, status, xhr) {
+                    switch (key) {
+                        case stateManager.keys.customerProfile:
+                            {
+                                stateManager.customerProfile = {};
+                                setCustomerProfile(xhr.responseText);
+                                break;
+                            }
+                        case stateManager.keys.assetAllocationBaseModels:
+                            {
+                                stateManager.assetAllocationBaseModels = {};
+                                setAssetAllocationBaseModels(xhr.responseText);
+                                break;
+                            }
+
+                    }
+                    showNotificationBar('success');
+                },
+                complete: function (xhr, status) {
+                    showNotificationBar('complete');
+                },
+            });
+            return result;
+        }
+
+        function Post2Server(jsonObject, key) {
+            const result = $.ajax({
+                method: "POST",
+                url: `${jsonObject}`,
+                async: false,
+                beforeSend: function (xhr, settings) {
+
+                },
+                error: function (xhr, exception) {
+                    alert('error');
+                },
+                dataFilter: function (data, type) {
+
+                },
+                success: function (data, status, xhr) {
+                    switch (key) {
+                        case stateManager.keys.customerProfile:
+                            {
+                                setCustomerProfile(data);
+                                break;
+                            }
+                    }
+                    showNotificationBar('success');
+                },
+                complete: function (xhr, status) {
+                    showNotificationBar('complete');
+                },
+            });
+            return result;
+        }
+        /// find the first color that is inUse == false
+        function getWindowPaneColor() {
+            let availableColor = null;
+            $.each(stateManager.windowPaneColorCollection, function (key, value) {
+                if (value.inUse === false && availableColor === null) {
+                    value.inUse = true;
+                    availableColor = value.hexColor;
+                }
+            });
+            return availableColor;
+        }
+
+        $('#shortcutIcon').click(function () {
+            //createWindowPane('memberLogin', 'Member Login');
+            showCreateProfile();
+            return false;
+        })
+
+        $('#shortcutIcon0').click(function () {
+            //createWindowPane('createProfile', 'Create Profile');
+            showCreateProfile();
+            return false;
+        })
+
+        $('#shortcutIcon1').click(function () {
+            //createWindowPane('selectAdvisor', 'Select Advisor');
+            showSelectAdvisor();
+            return false;
+        })
+
+        $('#shortcutIcon2').click(function () {
+            //createWindowPane('selectModel', 'Find Portfolio Model');
+            showSelectModel();
+            return false;
+        })
+
+        $('#shortcutIcon3').click(function () {
+            //createWindowPane('americansRetirement', 'About Americans Retirement');
+            showAmericansRetirement();
+            return false;
+        })
+
+        $('#shortcutIcon4').click(function () {
+            //createWindowPane('assetAllocationBaseModels', 'Asset Allocation Models');
+            showAssetAllocationBaseModels();
+            return false;
+        })
+        $('#shortcutIcon5').click(function () {
+            //createWindowPane('videoMeeting', 'Video Meeting');
+            showVideoMeeting();
+            return false;
+        })
+        ///startMenu buttons
+        // Button
+        $('#startButton').click(function () {
+            //createWindowPane('memberLogin', $(this).text());
+            showMemberLogin();
+            ShowStart();
+            return false;
+        })
+        // Button
+        $('#startButton0').click(function () {
+            //createWindowPane('createProfile', $(this).text());
+            showCreateProfile();
+            ShowStart();
+            return false;
+        })
+        // Button
+        $('#startButton1').click(function () {
+            //createWindowPane('americansRetirement', $(this).text());
+            showAmericansRetirement();
+            ShowStart();
+            return false;
+        })
+        $('#startButton2').click(function () {
+            //createWindowPane('riskAssessment', $(this).text());
+            showRiskAssessment();
+            ShowStart();
+            return false;
+        })
+        $('#startButton3').click(function () {
+            //createWindowPane('showBiztalk', $(this).text(), 1);
+            showShowBiztalk(1);
+            ShowStart();
+            return false;
+        })
+        $('#startButton4').click(function () {
+            //createWindowPane('selectAdvisor', $(this).text());
+            showSelectAdvisor();
+            ShowStart();
+            return false;
+        })
+        $('#startButton5').click(function () {
+            //createWindowPane('selectModel', $(this).text());
+            showSelectModel();
+            ShowStart();
+            return false;
+        })
+        $('#startButton6').click(function () {
+            //createWindowPane('viewEquities', $(this).text());
+            showViewEquities();
+            ShowStart();
+        })
+
+        // Button
+        $('#button2').click(function () {
+            $("#" + testWindowPane.id).parent().show();
+            return false;
+        })
+
+        // Button
+        $('#button3').click(function () {
+            $('#dialog_simple').dialog('open');
+            return false;
+        })
+        
+        // Button
+        $('#button5').click(function () {
+            /// loop through the collection of forms
+            $.each(stateManager.windowPanesCollection, function (key, value) {
+                $("#" + value.id).hide();
+            });
+            return false;
+        })
+
+        // Button
+        $('#button6').click(function () {
+            /// loop through the collection of forms
+            $.each(stateManager.windowPanesCollection, function (key, value) {
+                $("#" + value.id).show();
+            });
+            return false;
+        })
+
+        let navCount = 0;
+        function showNotificationBar(message, duration, bgColor, txtColor, height) {
+
+            try {
+                /*set default values*/
+                duration = typeof duration !== 'undefined' ? duration : 5000;
+                bgColor = typeof bgColor !== 'undefined' ? bgColor : "#03fc94";
+                txtColor = typeof txtColor !== 'undefined' ? txtColor : "black";
+                height = typeof height !== 'undefined' ? height : 40;
+                let zindex = 100000;
+                zindex = zindex + navCount;
+
+
+                /*create the notification bar div if it doesn't exist*/
+                if ($(`#notification-bar${navCount}`).height() == undefined) {
+                    var HTMLmessage = "<div class='notification-message' style='text-align:center; line-height: " + height + "px;z-index:100'> " + message + " </div>";
+                    $('body').prepend("<div id='notification-bar" + navCount + "' style='display:none; width:100%; height:" + height + "px; background-color: " + bgColor + "; position: fixed; z-index: " + zindex + "; color: " + txtColor + ";border-bottom: 1px solid " + txtColor + ";'>" + HTMLmessage + "</div>");
+
+                }//does exist but is hidden
+                else if ($(`#notification-bar${navCount}`).css('display') == 'none') {
+
+                }// it exists and is shown
+                else {
+                    //close the current div
+                    //show the new div
+
+                }
+                $(`#notification-bar${navCount - 1}`).remove();
+                $(`#notification-bar${navCount}`).slideDown();
+                setTimeout(hideMessage(), duration);
+                navCount++;
+            }
+            catch (err) {
+                alert('showNotificationBar: ' + err)
+            }
+        }
+
+        function hideMessage() {
+            $(`#notification-bar${navCount}`).slideUp(2000)
+        }
+
+        $(Document).ready(function () {
+
+            if (stateManager.customerProfile === null) {
+                ////createWindowPane('memberLogin');
+            }
+
+        })
+
+        function ShowStart() {
+            $("#startMenu").css("display", "block");
+            if (stateManager.startButtonState == false) {
+                $("#startMenu").removeClass("startMenuHide").addClass("startMenuShow");
+                stateManager.startButtonState = true;
+                //alert(stateManager.startButtonState + '==false')
+            } else {
+                $("#startMenu").removeClass("startMenuShow").addClass("startMenuHide");
+                stateManager.startButtonState = false;
+                //alert(stateManager.startButtonState + '==true')
+            }
+        }
+
+    </script>
+
+    <div id="frameDiv" class="popup shadow" style="margin: 40px; width: 700px; display:none;">
+        <div class="container">
+            <div class="row">
+                <nav style="height:70px" class="navbar navbar-expand-lg navbar-dark bg-primary">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">Title</a>
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a href="desktop.html">desktop.html</a>
+                                <a class="nav-link" href="#">Button 1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Button 2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Button 3</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <div style="height:400px;opacity:1;background-color:white"></div>
+            </div>
+            <div class="row">
+                <nav style="height:70px" class="navbar navbar-light bg-white sticky-bottom">
+                    <div class="container">
+                        <form class="d-flex">
+                            <button class="btn btn-outline-primary">Maximize</button>
+                            <button class="btn btn-outline-success">Minimize</button>
+                            <button class="btn btn-secondary">Close</button>
+                        </form>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+    <div id="frameDiv1" class="shadow" style="margin: 40px; width: 700px; z-index: 40000;display:none">
+        <div class="container">
+            <div class="row">
+                <nav style="height:70px" class="navbar navbar-expand-lg navbar-dark bg-primary">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">Title</a>
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Button 1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Button 2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Button 3</a>
+                            </li>
+                        </ul>
+                        <!--<form class="d-flex">
+                            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                        </form>-->
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <div style="height:400px;opacity:1;background-color:dimgray"></div>
+            </div>
+            <div class="row">
+                <nav style="height:70px" class="navbar navbar-light bg-white sticky-bottom">
+                    <div class="container">
+                        <form class="d-flex">
+                            <button class="btn btn-outline-primary">Maximize</button>
+                            <button class="btn btn-outline-success">Minimize</button>
+                            <button type="button" class="btn btn-secondary" onclick="changeZindex()">Close</button>
+                        </form>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script language="javascript">
+        $(document).ready(function () {
+            //$("#frameDiv").draggable();
+            //$("#frameDiv1").draggable();
+        });
+        function changeZIndex(frame) {
+            $("#" + frame).css('z-index', getNewTopFrameZIndex());
+        }
+        function showAmericansRetirement() {
+            let frameObject = {};
+            frameObject.applicationName = 'americansRetirement';
+            frameObject.title = 'Americans Retirement';
+            createFrame(frameObject);
+        }
+
+        function showRiskAssessment() {
+            let frameObject = {};
+            frameObject.applicationName = 'riskAssessment';
+            frameObject.title = 'Risk Assessment';
+            createFrame(frameObject);
+        }
+
+
+        function showSelectModel() {
+            let frameObject = {};
+            frameObject.applicationName = 'selectModel';
+            frameObject.title = 'Select Model';
+            createFrame(frameObject);
+        }
+
+        function showSelectAdvisor() {
+            let frameObject = {};
+            frameObject.applicationName = 'selectAdvisor';
+            frameObject.title = 'Select Advisor';
+            createFrame(frameObject);
+        }
+    
+        function showShowBiztalk(id,epoint,title) {
+            let frameObject = {};
+            frameObject.applicationName = 'showBiztalk';
+            frameObject.title = (title == null || title == undefined)?'Biztalk':title; 
+            frameObject.id = id;
+            frameObject.epoint = epoint;
+            createFrame(frameObject);
+        }
+
+        function showViewEquities() {
+            let frameObject = {};
+            frameObject.applicationName = 'viewEquities';
+            frameObject.title = 'Platform Equities';
+            createFrame(frameObject);
+        }
+
+        function showCreateProfile() {
+            let frameObject = {};
+            frameObject.applicationName = 'createProfile';
+            frameObject.title = 'Create Profile';
+            createFrame(frameObject);
+        }
+
+        function showMemberLogin() {
+            let frameObject = {};
+            frameObject.applicationName = 'memberLogin';
+            frameObject.title = 'Member Login';
+            createFrame(frameObject);
+        }
+
+        function showAssetAllocationBaseModels() {
+            let frameObject = {};
+            frameObject.applicationName = 'assetAllocationBaseModels';
+            frameObject.title = 'Asset Allocation Base Models';
+            createFrame(frameObject);
+        }
+
+        function showAssetAllocationBaseModelChart() {
+            let frameObject = {};
+            frameObject.applicationName = 'assetAllocationBaseModelChart';
+            frameObject.title = 'Asset Allocation Chart';
+            createFrame(frameObject);
+        }
+
+        function showVideoMeeting() {
+            let frameObject = {};
+            frameObject.applicationName = 'videoMeeting';
+            frameObject.title = 'Video Meeting';
+            createFrame(frameObject);
+        }
+
+        function createFrame(FrameObject) {
+            let newFrame = new Frame(FrameObject);
+            $('body').append(newFrame.injectableCode);
+
+            // Dialog message
+            let selectedColor = '#7E7E7E';
+            $(`#nav_${newFrame.id}`).css('background-color', selectedColor);
+            newFrame.displayState = "visible";
+            /// add windowPane object to collectionI
+            stateManager.windowPanesCollection.push(newFrame)
+
+            ///// create a button in minimize taskbar
+            let abbreviatedTitle = (newFrame.title.length > 15) ? `${newFrame.title.substring(0, 12)}...` : newFrame.title;
+            $('#minimizeBar').append(`<button onclick="$('#${newFrame.id}').show();" style="margin-top:5px; background-color: #f3f3f3" class="button button3" id="btn_${newFrame.id}"><i style="color:black" class="${newFrame.iconClass}"></i></button>`)
+            $(`#${newFrame.id}`).show();
+            $(`#${newFrame.id}`).draggable();
+            setTimeout(function () {               
+                $('#iframe_' + newFrame.id).attr('src', newFrame.src)
+            }, 1000);
+        }
+
+
+
+        function maximizeFrame(frame) {
+            let meWindowPane = getFrame(stateManager.windowPanesCollection, frame);
+            if ($(`#iconFrameMaximize_${frame}`).hasClass('fa-window-maximize')) {
+                // store the current window position
+                let _width = $("#" + meWindowPane.id).css('width').slice(0, -2);
+                let _height = $("#" + meWindowPane.id).css('height').slice(0, -2);
+                let _top = $("#" + meWindowPane.id).css('top');
+                let _left = $("#" + meWindowPane.id).css('left');
+                //alert(`${_width}, ${_height}, ${_top}, ${_left}`);
+                setFrameLocation(stateManager.windowPanesCollection, meWindowPane.id, _top, _left, _height, _width)
+                $("#" + meWindowPane.id).css('width', $(window).width()-100);
+                $("#iframe_" + meWindowPane.id).css('width', $(window).width()-140);
+                $("#nav_" + meWindowPane.id).css('width', $(window).width()-120);
+                $("#" + meWindowPane.id).css('height', $(window).height()-50);
+                $("#iframe_" + meWindowPane.id).css('height', $(window).height() - 170);                
+                $("#" + meWindowPane.id).css('top', 0);
+                $("#" + meWindowPane.id).css('left', 0);
+                $(`#iconFrameMaximize_${frame}`).removeClass('fa-window-maximize').addClass('fa-window-restore');
+            }
+            else if ($(`#iconFrameMaximize_${frame}`).hasClass('fa-window-restore')) {
+                $("#" + meWindowPane.id).css('width', meWindowPane.restoredWidth);
+                $("#iframe_" + meWindowPane.id).css('width', meWindowPane.restoredWidth-40);
+                $("#nav_" + meWindowPane.id).css('width', meWindowPane.restoredWidth-20);
+                $("#" + meWindowPane.id).css('height', meWindowPane.restoredHeight);
+                $("#iframe_" + meWindowPane.id).css('height', meWindowPane.restoredHeight-120);
+                $("#" + meWindowPane.id).css('top', meWindowPane.restoredTop);
+                $("#" + meWindowPane.id).css('left', meWindowPane.restoredLeft);
+                $(`#iconFrameMaximize_${frame}`).removeClass('fa-window-restore').addClass('fa-window-maximize');
+            }
+        }
+
+
+        function minimizeFrame(frame) {
+            $(`#${frame}`).hide();
+        }
+
+        function closeFrame(frame) {
+            $(`#${frame}`).remove();            
+            $('#btn_' + frame).hide();
+            $('#btn_' + frame).remove();
+            $('#btn_' + frame).button("destroy");
+  
+        }
+    </script>
+</body>
+</html>
