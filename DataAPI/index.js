@@ -1,20 +1,25 @@
 // index.js
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
-
+const db = require('./firebase');
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('🚀 Hello from Express API on Render, this is second commit!');
+app.get('/api/users', async (req, res) => {
+  const ref = db.ref('users');
+  ref.once('value', (snapshot) => {
+    res.json(snapshot.val());
+  });
 });
 
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello world!' });
+app.post('/api/users', async (req, res) => {
+  const { name, email } = req.body;
+  const ref = db.ref('users');
+  const newUserRef = ref.push();
+  newUserRef.set({ name, email });
+  res.json({ id: newUserRef.key, name, email });
 });
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`API running at http://localhost:${PORT}`);
 });
-
-
