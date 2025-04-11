@@ -17,12 +17,4 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-app.get('/users', async (req, res) => {
-    try {
-      const result = await db.query('SELECT * FROM users');
-      res.json(result.rows);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Server error');
-    }
-  });
+
