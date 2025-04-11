@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('🚀 Hello from Express API on Render!');
+  res.send('🚀 Hello from Express API on Render, this is second commit!');
 });
 
 app.get('/api/hello', (req, res) => {
