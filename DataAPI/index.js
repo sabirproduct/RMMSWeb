@@ -8,8 +8,6 @@ const cors = require('cors');
 app.use(cors()); // Allow all origins (you can restrict later)
 app.use(express.json());
 
-
-
 app.get('/api/users', async (req, res) => {
   const ref = db.ref('users');
   ref.once('value', (snapshot) => {
@@ -23,6 +21,12 @@ app.post('/api/users', async (req, res) => {
   const newUserRef = ref.push();
   newUserRef.set({ name, email });
   res.json({ id: newUserRef.key, name, email });
+});
+
+app.get('/api', async (req, res) => {
+  const query = req.query.json;
+  const { methodName, params } = JSON.parse(query);
+  res.send(`${methodName} called`);
 });
 
 const PORT = process.env.PORT || 3000;
