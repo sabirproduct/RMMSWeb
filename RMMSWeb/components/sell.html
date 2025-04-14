@@ -39,7 +39,7 @@
                 <div class="col-7">
                     <div class="input-group">
                         <span class="input-group-text">⚖️</span>
-                        <input type="number" id="quantity" name="quantity" class="form-control" min="1" required placeholder="Enter quantity">
+                        <input type="number" id="quantity" name="quantity" class="form-control" min="1" step="0.01" required placeholder="Enter quantity">
                     </div>
                 </div>
                 <div class="col-5">
@@ -162,7 +162,7 @@
             <input type="date" id="transactionDate" name="transactionDate" class="form-control" required>
         </div>
 
-        <button type="submit" class="btn btn-primary" onclick="handleSubmit(event)">Add Transaction</button>
+        <button type="submit" class="btn btn-primary" onclick="if (document.querySelector('.needs-validation').checkValidity()) { handleSubmit(event); } else { event.preventDefault(); document.querySelector('.needs-validation').classList.add('was-validated'); }">Add Transaction</button>
 
         <script>
             function handleSubmit(event) {

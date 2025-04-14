@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="css/bootswatch/united.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/60991e3d6f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="js/device.js"></script>
     <script src="js/frame.js?ver"></script>
     <script src="js/frames.js"></script>
@@ -200,18 +201,23 @@
 
     -->
     <div id="WebDesktop" style="display:normal">
-        <div id="userProfile" style="width: 80px;position: fixed; top: 50px; left: 50px; color: white">
-            <div style="width:100%;"><i class="fa-solid fa-circle-user fa-2xl" onclick="showPages('profile')"></i></div>
-            <span style="width: 100%;font-size: 10px">User Profile</span>
+        <div id="addcustomer" style="width: 80px;position: fixed; top: 50px; left: 50px; color: white">
+            <div style="width:100%;"><i class="bi bi-people" onclick="showPages('customers')"></i></div>
+            <span style="width: 100%;font-size: 10px">Customers</span>
+        </div>        
+        <div id="purchase" style="width: 80px;position: fixed; top: 150px; left: 50px; color: white">
+            <div style="width:100%;"><i class="bi bi-cart" onclick="showPages('purchase')"></i></div>
+            <span style="width: 100%;font-size: 10px">Purchase</span>
         </div>
-        <div id="sell" style="width: 80px;position: fixed; top: 150px; left: 50px; color: white">
-            <div style="width:100%;"><i class="fa-solid fa-receipt fa-2xl" onclick="showPages('sell')"></i></div>
+        <div id="sell" style="width:80px;position: fixed; top: 250px; left: 50px; color: white">
+            <div style="width:100%;"><i class="bi bi-truck" onclick="showPages('sell')"></i></div>
             <span style="width: 100%;font-size: 10px">Sell</span>
         </div>
-        <div id="waybill" style="width: 80px;position: fixed; top: 250px; left: 50px; color: white">
-            <div style="width:100%;"><i class="fa-solid fa-truck fa-2xl" onclick="showPages('ewaybill')"></i></div>
+        <div id="waybill" style="position: fixed; top: 350px; left: 50px; color: white">
+            <div style="width:100%;"><i class="bi bi-receipt" onclick="showPages('ewaybill')"></i></div>
             <span style="width: 100%;font-size: 10px">eWay Bill</span>
         </div>
+       
         
         <div id="minimizeBar" class="taskbar Z1002" style="width:100%;height:55px;position:fixed;bottom:0px;">
             <div style="margin-top:0px;position:absolute;left:10px" class="" id="button4"  onclick="ShowStart()"><img width="55" src="content/images/frames_start_50.png"/></div>
@@ -224,8 +230,10 @@
             </div>
             <hr />
             <div style="margin-left:20px" class="btn-group-vertical">
-                <button type="button" onclick="showPages('profile');ShowStart()" class="btn btn-outline-secondary" style="text-align:left;color:black"><i class="fa-solid fa-circle-user fa-lg"></i>&nbsp; User Profile</button>
-                <button type="button" onclick="showPages('sell');ShowStart()" class="btn btn-outline-secondary" style="text-align:left;color:black"><i class="fa-solid fa-receipt fa-lg"></i>&nbsp; Sell</button>
+                <button type="button" onclick="showPages('sell');ShowStart()" class="btn btn-outline-secondary" style="text-align:left;color:black"><i class="bi bi-receipt"></i>&nbsp; Sell</button>
+                <button type="button" onclick="showPages('customers');ShowStart()" class="btn btn-outline-secondary" style="text-align:left;color:black"><i class="bi bi-people"></i>&nbsp; Customers</button>
+                <button type="button" onclick="showPages('purchase');ShowStart()" class="btn btn-outline-secondary" style="text-align:left;color:black"><i class="bi bi-cart"></i>&nbsp; Purchase</button>
+                <button type="button" onclick="showPages('ewaybill');ShowStart()" class="btn btn-outline-secondary" style="text-align:left;color:black"><i class="bi bi-file-earmark-text"></i>&nbsp; eWay Bill</button>
             </div>
         </div>
     </div>

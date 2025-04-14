@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Purchase Transaction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Optional: Link to external CSS -->
+</head>
+<body class="container">
+    <form action="/submit-purchase-transaction" method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="itemName" class="form-label">Item Name:</label>
+            <div class="row">
+                <div class="col-6">
+                    <select id="itemName" name="itemName" class="form-control select2" required>
+                        <option value="">Select an item</option>
+                        <option value="item1">Item 1</option>
+                        <option value="item2">Item 2</option>
+                        <option value="item3">Item 3</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <select id="subItemName" name="subItemName" class="form-control select2" required>
+                        <option value="">Select a sub-item</option>
+                        <option value="subItem1">Sub Item 1</option>
+                        <option value="subItem2">Sub Item 2</option>
+                        <option value="subItem3">Sub Item 3</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity:</label>
+            <div class="row">
+                <div class="col-7">
+                    <div class="input-group">
+                        <span class="input-group-text">⚖️</span>
+                        <input type="number" id="quantity" name="quantity" class="form-control" min="1" step="0.01" required placeholder="Enter quantity">
+                    </div>
+                </div>
+                <div class="col-5">
+                    <select id="quantityUnit" name="quantityUnit" class="form-control select2" required>
+                        <option value="bag">Bag</option>
+                        <option value="kg">KG</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="row">
+                <label for="price" class="form-label">Price per Unit:</label>
+                <div class="input-group">
+                    <span class="input-group-text">₹</span>
+                    <input type="number" id="price" name="price" class="form-control" step="0.01" required placeholder="Enter price">
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="moisture" class="form-label">Moisture %:</label>
+            <div class="input-group">
+                <span class="input-group-text">💧</span>
+                <input type="number" id="moisture" name="moisture" class="form-control" min="0" step="0.01" required placeholder="Enter moisture percentage">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="dustAndWet" class="form-label">Dust and Wet (KG):</label>
+            <div class="input-group">
+                <span class="input-group-text">🌫️</span>
+                <input type="number" id="dustAndWet" name="dustAndWet" class="form-control" min="0" step="0.01" required placeholder="Enter dust and wet weight">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="bagWeight" class="form-label">Bag Weight (KG):</label>
+            <div class="input-group">
+                <span class="input-group-text">👜</span>
+                <input type="number" id="bagWeight" name="bagWeight" class="form-control" min="0" step="0.01" required placeholder="Enter bag weight">
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('moisture').addEventListener('input', calculateTotalPrice);
+            document.getElementById('dustAndWet').addEventListener('input', calculateTotalPrice);
+            document.getElementById('bagWeight').addEventListener('input', calculateTotalPrice);
+
+            function calculateTotalPrice() {
+                const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+                const price = parseFloat(document.getElementById('price').value) || 0;
+                const moisture = parseFloat(document.getElementById('moisture').value) || 0;
+                const dustAndWet = parseFloat(document.getElementById('dustAndWet').value) || 0;
+                const bagWeight = parseFloat(document.getElementById('bagWeight').value) || 0;
+                const quantityUnit = document.getElementById('quantityUnit').value;
+
+                let totalQuantity = quantity;
+                let adjustedPrice = price;
+
+                if (quantityUnit === 'bag') {
+                    totalQuantity = quantity * 50; // Each bag is 50 KG
+                    adjustedPrice = price / 50; // Adjust price per KG
+                }
+
+                const netQuantity = totalQuantity - (totalQuantity * (moisture / 100)) - dustAndWet - bagWeight;
+                const totalPrice = netQuantity * adjustedPrice;
+
+                document.getElementById('totalPrice').value = totalPrice.toFixed(2);
+                document.getElementById('totalPriceDisplay').textContent = `Total Price: ₹${totalPrice.toFixed(2)}`;
+                document.getElementById('totalPriceInWords').textContent = `Total Price in Words: ${convertNumberToWords(totalPrice)} Rupees Only`;
+
+                updateCalculationDetails(totalQuantity, moisture, dustAndWet, bagWeight, netQuantity);
+            }
+        </script>
+        <div class="mb-3">
+            <label for="totalPrice" class="form-label">Total Price:</label>
+            <div class="input-group">
+                <span class="input-group-text">₹</span>
+                <input type="text" id="totalPrice" name="totalPrice" class="form-control" readonly style="background-color: #f8f9fa; color: #6c757d;">
+            </div>
+            <div class="form-text">
+                <strong id="totalPriceDisplay">Total Price: ₹0.00</strong>
+                <br>
+                <em id="totalPriceInWords">Total Price in Words: Zero Rupees Only</em>
+                <br>
+                <small id="calculationDetails">
+                    <strong>Calculation Details:</strong>
+                    <ul>
+                        <li>Original Quantity: <span id="originalQuantityDisplay">0</span> KG</li>
+                        <li>Moisture Deduction: <span id="moistureDeductionDisplay">0</span> KG</li>
+                        <li>Dust and Wet Deduction: <span id="dustAndWetDeductionDisplay">0</span> KG</li>
+                        <li>Bag Weight Deduction: <span id="bagWeightDeductionDisplay">0</span> KG</li>
+                        <li><b>Net Quantity: <span id="netQuantityDisplay">0</span> KG</b></li>
+                    </ul>                  
+                </small>
+            </div>
+        </div>
+    </form>
+<script>
+    function updateCalculationDetails(totalQuantity, moisture, dustAndWet, bagWeight, netQuantity) {
+        const moistureDeduction = totalQuantity * (moisture / 100);
+
+        document.getElementById('originalQuantityDisplay').textContent = totalQuantity.toFixed(2);
+        document.getElementById('moistureDeductionDisplay').textContent = moistureDeduction.toFixed(2);
+        document.getElementById('dustAndWetDeductionDisplay').textContent = dustAndWet.toFixed(2);
+        document.getElementById('bagWeightDeductionDisplay').textContent = bagWeight.toFixed(2);
+        document.getElementById('netQuantityDisplay').textContent = netQuantity.toFixed(2);
+    }
+    function convertNumberToWords(num) {
+    const units = [
+        "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+        "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+    ];
+    const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+    const scales = ["", "Thousand", "Lakh", "Crore"];
+
+    function numberToWords(n) {
+        if (n === 0) return "Zero";
+        if (n < 20) return units[n];
+        if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + units[n % 10] : "");
+        if (n < 1000) return units[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " and " + numberToWords(n % 100) : "");
+
+        for (let i = scales.length - 1; i > 0; i--) {
+            const divisor = Math.pow(10, i * 2);
+            if (n >= divisor) {
+                return (
+                    numberToWords(Math.floor(n / divisor)) +
+                    " " +
+                    scales[i] +
+                    (n % divisor ? " " + numberToWords(n % divisor) : "")
+                );
+            }
+        }
+        return "";
+    }
+
+    return numberToWords(Math.floor(num)); // Ensure no decimals are processed
+}
+    // Event listeners for input changes
+    document.getElementById('quantity').addEventListener('input', calculateTotalPrice);
+    document.getElementById('price').addEventListener('input', calculateTotalPrice);
+    document.getElementById('moisture').addEventListener('input', calculateTotalPrice);
+    document.getElementById('dustAndWet').addEventListener('input', calculateTotalPrice);
+    document.getElementById('bagWeight').addEventListener('input', calculateTotalPrice);
+    document.getElementById('quantityUnit').addEventListener('change', calculateTotalPrice);
+               
+            </script>
+        </div>
+
+        <div class="mb-3">
+            <label for="supplierName" class="form-label">Supplier Name:</label>
+            <select id="supplierName" name="supplierName" class="form-select select2" required>
+                <option value="">Select a supplier</option>
+                <option value="supplier1">Supplier 1</option>
+                <option value="supplier2">Supplier 2</option>
+                <option value="supplier3">Supplier 3</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="transactionDate" class="form-label">Transaction Date:</label>
+            <input type="date" id="transactionDate" name="transactionDate" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" onclick="if (document.querySelector('.needs-validation').checkValidity()) { handleSubmit(event); } else { event.preventDefault(); document.querySelector('.needs-validation').classList.add('was-validated'); }">Add Purchase</button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+        <script>
+            function handleSubmit(event) {
+            }
+        </script>
+    </form>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#supplierName').select2();
+        });
+    </script>
+</body>
+</html>
