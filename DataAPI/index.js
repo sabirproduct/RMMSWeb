@@ -25,6 +25,31 @@ app.post('/api/:node', async (req, res) => {
   res.json({ id: newRef.key, ...data });
 });
 
+app.put('/api/:node/:id', async (req, res) => {
+  const { node, id } = req.params;
+  const data = req.body;
+  const ref = db.ref(`${node}/${id}`);
+  ref.update(data, (error) => {
+    if (error) {
+      res.status(500).json({ error: 'Failed to update data' });
+    } else {
+      res.json({ id, ...data });
+    }
+  });
+});
+
+app.delete('/api/:node/:id', async (req, res) => {
+  const { node, id } = req.params;
+  const ref = db.ref(`${node}/${id}`);
+  ref.remove((error) => {
+    if (error) {
+      res.status(500).json({ error: 'Failed to delete data' });
+    } else {
+      res.json({ message: 'Data deleted successfully', id });
+    }
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`API running at http://localhost:${PORT}`);
