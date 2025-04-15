@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const db = require('./firebase');
 const cors = require('cors');
-
+const { processApiRequest } = require('./dataProcessing');
 
 app.use(cors()); // Allow all origins (you can restrict later)
 app.use(express.json());
@@ -23,10 +23,18 @@ app.post('/api/users', async (req, res) => {
   res.json({ id: newUserRef.key, name, email });
 });
 
-app.get('/api', async (req, res) => {
-  const query = req.query.json;
-  const { methodName, params } = JSON.parse(query);
-  res.send(`${methodName} called`);
+// Endpoint to handle dynamic API requests
+// This endpoint will process the request based on the method name and parameters provided in the query string
+// Example query: {"methodName":"getUser","params":{"id":1}}
+app.post('/api', (req, res) => {
+  try {
+
+    const query = req.query.json;
+    const result = processApiRequest(query);
+    res.send(JSON.stringify(result));
+  } catch (error) {
+    res.status(400).send(`Error processing request: ${error.message}`);
+  }
 });
 
 const PORT = process.env.PORT || 3000;
