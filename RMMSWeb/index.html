@@ -368,7 +368,45 @@
             return result;
         }
 
-        
+        function Put2Server(data, endpoint) {
+            let url = `https://rmmswebapi.onrender.com/api/${endpoint}`;
+            let result = null;
+            $.ajax({
+                method: "PUT",
+                url: url,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                async: false,
+                beforeSend: function (xhr, settings) {
+                },
+                success: function (response) {
+                    result = response;
+                },
+                error: function (error) {
+                    console.error("Error occurred:", error.responseText);
+                }
+            });
+            return result;
+        }
+
+        function DeleteFromServer(endpoint) {
+            let url = `https://rmmswebapi.onrender.com/api/${endpoint}`;
+            let result = null;
+            $.ajax({
+                method: "DELETE",
+                url: url,
+                async: false,
+                beforeSend: function (xhr, settings) {
+                },
+                success: function (response) {
+                    result = response;
+                },
+                error: function (error) {
+                    console.error("Error occurred:", error.responseText);
+                }
+            });
+            return result;
+        }
         /// find the first color that is inUse == false
         function getWindowPaneColor() {
             let availableColor = null;

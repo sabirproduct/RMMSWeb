@@ -130,10 +130,8 @@
             formData.forEach((value, key) => {
                 jsonObject[key] = value;
             });
-
             //Post the data to the server
-            const userData = { name: "John Doe", email: "john.doe@example.com" };
-            var id = parent.Post2Server(userData,'users');
+            var id = parent.Post2Server(jsonObject,'customers');
             alert(id);
             }
         </script>

@@ -9,6 +9,7 @@
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="styles.css"> <!-- Optional: Link to external CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> <!-- Bootstrap Icons -->
 </head>
 <body class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -25,36 +26,12 @@
                 <th>Mobile 2</th>
                 <th>Email</th>
                 <th>GSTIN</th>
+                <th>State</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Example row -->
-            <tr>
-                <td>John Doe</td>
-                <td>123 Main Street</td>
-                <td>9876543210</td>
-                <td>9123456789</td>
-                <td>john.doe@example.com</td>
-                <td>22AAAAA0000A1Z5</td>
-                <td>
-                    <button class="btn btn-warning btn-sm" onclick="editCustomer(this)">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteCustomer()">Delete</button>
-                </td>
-            </tr>
-            <!-- Additional rows will be dynamically added -->
-            <tr>
-                <td>John Shena</td>
-                <td>123 Main Street</td>
-                <td>9876543210</td>
-                <td>9123456789</td>
-                <td>john.doe@example.com</td>
-                <td>22AAAAA0000A1Z5</td>
-                <td>
-                    <button class="btn btn-warning btn-sm" onclick="editCustomer(this)">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteCustomer()">Delete</button>
-                </td>
-            </tr>
+            <!-- Rows will be populated dynamically with JavaScript -->
         </tbody>
     </table>
 
@@ -66,14 +43,47 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#customerTable').DataTable({
-                searching: true, // Enable search field
-                paging: true,    // Enable pagination
-                info: true       // Show table info
+            // Initialize DataTable with a loading message
+            var table = $('#customerTable').DataTable({
+            searching: true, // Enable search field
+            paging: true,    // Enable pagination
+            info: true,      // Show table info
+            language: {
+                emptyTable: "Loading data, please wait..." // Message while data is loading
+            }
+            });
+
+            // Get Customer List from server
+            var customers = parent.GetFromServer('customers');
+
+            // Convert the result object into an array of customer objects
+            customers = Object.keys(customers).map(key => {
+            customers[key].id = key; // Add the ID to the customer object
+            return customers[key];
+            });
+
+            // Clear the loading message
+            table.clear();
+
+            // Populate the table dynamically with customer data
+            customers.forEach(customer => {
+            table.row.add([
+                customer.customerName,
+                customer.address,
+                customer.isWhatsapp === 'on' ? ` ${customer.mobile1} <i class="bi bi-whatsapp text-success"></i>` : customer.mobile1,
+                customer.mobile2,
+                customer.email,
+                customer.gstin,
+                customer.state,
+                `
+                <button class="btn btn-warning btn-sm" onclick="editCustomer(this, '${customer.id}')">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${customer.id}')">Delete</button>
+                `
+            ]).draw();
             });
         });
 
-        function editCustomer(button) {
+        function editCustomer(button,id) {
             const row = button.closest('tr');
             const cells = row.querySelectorAll('td');
 
@@ -88,8 +98,48 @@
             // Replace action buttons with Save and Cancel
             const actionsCell = cells[cells.length - 1];
             actionsCell.innerHTML = `
-            <button class="btn btn-success btn-sm" onclick="saveEdit(this)">Save</button>
+            <button class="btn btn-success btn-sm" onclick="saveEdit(this,'${id}')">Save</button>
             <button class="btn btn-secondary btn-sm" onclick="cancelEdit(this, '${btoa(JSON.stringify(currentValues))}')">Cancel</button>
+            `;
+        }
+
+        function saveEdit(button,id) {
+            const row = button.closest('tr');
+            const cells = row.querySelectorAll('td');
+
+            // Collect updated values from input fields
+            const updatedValues = Array.from(cells).slice(0, -1).map(cell => {
+            const input = cell.querySelector('input');
+            return input ? input.value : cell.textContent;
+            });
+
+            // Send updated values to the server
+            const customerData = {
+            customerName: updatedValues[0],
+            address: updatedValues[1],
+            mobile1: updatedValues[2],
+            mobile2: updatedValues[3],
+            email: updatedValues[4],
+            gstin: updatedValues[5],
+            state: updatedValues[6]
+            };
+
+            if (typeof parent.put2server === 'function') {
+            parent.put2server(`customers/${id}`, customerData);
+            } else {
+            console.error('put2server function is not accessible or defined in the parent frame.');
+            }
+
+            // Save updated values back to the row
+            Array.from(cells).slice(0, -1).forEach((cell, index) => {
+            cell.textContent = updatedValues[index];
+            });
+
+            // Restore action buttons
+            const actionsCell = cells[cells.length - 1];
+            actionsCell.innerHTML = `
+            <button class="btn btn-warning btn-sm" onclick="editCustomer(this)">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteCustomer()">Delete</button>
             `;
         }
 
