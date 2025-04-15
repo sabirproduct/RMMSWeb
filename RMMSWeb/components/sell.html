@@ -51,6 +51,10 @@
             </script>
         </div>
         <div class="mb-3">
+            <label for="truckNumber" class="form-label">Truck Number:</label>
+            <input type="text" id="truckNumber" name="truckNumber" class="form-control" required placeholder="Enter truck number" style="text-transform: uppercase;">
+        </div>
+        <div class="mb-3">
             <label for="itemName" class="form-label">Item Name:</label>
             <select id="itemName" name="itemName" class="form-control select2" required>
                 <option value="">Select an item</option>
@@ -282,6 +286,12 @@
                     return markup; // Allow HTML markup
                 }
             });
+        
+            //Get Customers
+            var data = parent.GetFromServer('users');
+            console.log(JSON.stringify(data));
+            //sample result: -ONXjQtYpkk3avFVcR9y
+
         });
     </script>
 </body>
