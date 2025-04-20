@@ -5,8 +5,9 @@ let Frame = function (FrameObject) {
     /// add a switch statement for mapping the applicationName to the iframeAddress
     let applicationName = FrameObject.applicationName;
     let iframeSrc = '';
+    let json = FrameObject.json? FrameObject.json : '';
     let iconClass = 'fa-duotone fa-chart-pie-simple';
-            iframeSrc = `./components/${FrameObject.pageName}.html`;
+            iframeSrc = `./components/${FrameObject.pageName}.html?json=${json}`;
             _Frame.autoOpen = false;
             _Frame.width = window.innerWidth;
             _Frame.height = window.innerHeight;

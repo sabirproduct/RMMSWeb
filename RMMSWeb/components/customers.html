@@ -68,7 +68,7 @@
             // Populate the table dynamically with customer data
             customers.forEach(customer => {
             table.row.add([
-                customer.customerName,
+                `<a href="#" onClick="showLedger()">${customer.customerName}</a>`,
                 customer.address,
                 customer.isWhatsapp === 'on' ? ` ${customer.mobile1} <i class="bi bi-whatsapp text-success"></i>` : customer.mobile1,
                 customer.mobile2,
@@ -200,6 +200,18 @@
                 console.error('createFrame function is not accessible or defined in the parent frame.');
             }
             // Here you can send the JSON object to your server using fetch or XMLHttpRequest      
+        }
+
+        function showLedger(){
+            let frameObject = {};
+            frameObject.applicationName = 'framewithoutfilter';
+            frameObject.title = "Customer Ledger";
+            frameObject.pageName = "ledger";
+            if (typeof parent.createFrame === 'function') {
+                parent.createFrame(frameObject);
+            } else {
+                console.error('createFrame function is not accessible or defined in the parent frame.');
+            } 
         }
     </script>
 </body>

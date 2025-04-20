@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Paddy Invoice</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="container my-4" id="invoice">
+    <div class="text-center mb-4">
+      <h2>Paddy Purchase Invoice</h2>
+      <small>Date: <span id="transactionDate"></span></small>
+    </div>
+    
+    <div class="row mb-3">
+      <div class="col-md-6"><strong>Truck Number:</strong> <span id="truckNumber"></span></div>
+      <div class="col-md-6"><strong>Supplier ID:</strong> <span id="supplierId"></span></div>
+    </div>
+
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Paddy Type</th>
+          <th>Bags</th>
+          <th>Quantity</th>
+          <th>Rate</th>
+          <th>Moisture</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody id="paddyTableBody">
+        <!-- Rows will be inserted here -->
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="3">Dust & Wet</th>
+          <td colspan="4" id="dustAndWet"></td>
+        </tr>
+        <tr>
+          <th colspan="3">Total Quantity</th>
+          <td colspan="4" id="totalQuantityTR"></td>
+        </tr>
+        <tr>
+          <th colspan="3">Total Price</th>
+          <td colspan="4" id="totalPrice"></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="text-center mt-4">
+      <button class="btn btn-primary me-2" onclick="window.print()">🖨️ Print</button>
+      <button class="btn btn-success" onclick="downloadPDF()">📄 Download PDF</button>
+    </div>
+  </div>
+
+  <script>
+    const invoiceData = {
+      dustAndWet: "40",
+      paddyInformation: [
+        {
+          actualQuantity: "1001.00",
+          amountAfterTR: "20938.00",
+          bags: "20",
+          moisture: "0.00%",
+          paddyType: "36 (৩৬) (Low (কমা))",
+          rate: "1255.00"
+        },
+        {
+          actualQuantity: "11009.00",
+          amountAfterTR: "232106.00",
+          bags: "220",
+          moisture: "0.00%",
+          paddyType: "36 (৩৬)",
+          rate: "1265.00"
+        }
+      ],
+      supplierId: "-ONtF-iWh9D2SK9eXNLa ",
+      totalPrice: "253044.00",
+      totalQuantityTR: "12050",
+      transactionDate: "2025-04-20",
+      truckNumber: "wb43d4545"
+    };
+
+    document.getElementById("transactionDate").textContent = invoiceData.transactionDate;
+    document.getElementById("truckNumber").textContent = invoiceData.truckNumber;
+    document.getElementById("supplierId").textContent = invoiceData.supplierId;
+    document.getElementById("dustAndWet").textContent = invoiceData.dustAndWet;
+    document.getElementById("totalQuantityTR").textContent = invoiceData.totalQuantityTR;
+    document.getElementById("totalPrice").textContent = invoiceData.totalPrice;
+
+    const tbody = document.getElementById("paddyTableBody");
+
+    invoiceData.paddyInformation.forEach((item, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${item.paddyType}</td>
+        <td>${item.bags}</td>
+        <td>${item.actualQuantity}</td>
+        <td>${item.rate}</td>
+        <td>${item.moisture}</td>
+        <td>${item.amountAfterTR}</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const content = document.getElementById("invoice");
+      await doc.html(content, {
+        callback: function (doc) {
+          doc.save("paddy-invoice.pdf");
+        },
+        x: 10,
+        y: 10,
+        html2canvas: { scale: 0.5 }
+      });
+    }
+  </script>
+</body>
+</html>
