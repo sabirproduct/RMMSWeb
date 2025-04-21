@@ -22,6 +22,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
   </head>
 
   <body class="container">
@@ -389,7 +390,7 @@
 
         <div class="mb-3 col-6">
           <label class="form-label">TR Slip Preview:</label>
-          <div
+          <img
             id="trSlipPreview"
             style="
               border: 1px solid #ddd;
@@ -399,60 +400,21 @@
               height: 100%;
               overflow: hidden;
             "
-          >
-            <em>No image uploaded</em>
+            src=""
+            alt="TR Slip Preview"
+            class="img-fluid"
+          >        
           </div>
         </div>
       </div>
 
       <script>
+        let TRSlipImageURL="";
         document
           .getElementById("trSlipUpload")
           .addEventListener("change", function (event) {
             const file = event.target.files[0];
-            const previewContainer = document.getElementById("trSlipPreview");
-
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = function (e) {
-                const img = new Image();
-                img.src = e.target.result;
-                img.onload = function () {
-                  const canvas = document.createElement("canvas");
-                  const ctx = canvas.getContext("2d");
-                  const maxWidth = 500;
-                  const maxHeight = 150;
-
-                  let width = img.width;
-                  let height = img.height;
-
-                  const widthRatio = maxWidth / width;
-                  const heightRatio = maxHeight / height;
-                  const ratio = Math.min(widthRatio, heightRatio);
-
-                  width = width * ratio;
-                  height = height * ratio;
-
-                  canvas.width = maxWidth;
-                  canvas.height = maxHeight;
-
-                  // Fill the canvas with a white background
-                  ctx.fillStyle = "#fff";
-                  ctx.fillRect(0, 0, maxWidth, maxHeight);
-
-                  // Center the image in the canvas
-                  const xOffset = (maxWidth - width) / 2;
-                  const yOffset = (maxHeight - height) / 2;
-
-                  ctx.drawImage(img, xOffset, yOffset, width, height);
-
-                  previewContainer.innerHTML = `<img src="${canvas.toDataURL()}" alt="TR Slip Preview" style="max-width: 100%; height: auto;">`;
-                };
-              };
-              reader.readAsDataURL(file);
-            } else {
-              previewContainer.innerHTML = "<em>No image uploaded</em>";
-            }
+            uploadImage(file);
           });
       </script>
 
@@ -718,6 +680,39 @@
       document
         .getElementById("dustAndWet")
         .addEventListener("input", updateCalculationDetails);
+
+
+        // Upload Image into Cloudinary
+    async function uploadImage(file) {
+      if (!file) {
+        alert("Please select an image file to upload.");
+        return;
+      }
+      // Create a FormData object to send the file
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "unsigned_preset"); // Change this to your preset
+
+      try {
+        const response = await axios.post(
+          "https://api.cloudinary.com/v1_1/dxy1gzg9d/image/upload", // Replace with your Cloud name
+          formData
+        );
+
+        const imageUrl = response.data.secure_url;
+
+        // Show the uploaded image and URL
+        TRSlipImageURL = imageUrl;
+        document.getElementById("trSlipPreview").src = imageUrl;
+
+        // You can now save `imageUrl` to your database
+
+      } catch (error) {
+        console.error("Upload failed:", error);
+        alert("Upload failed. Check console.");
+      }
+    }
     </script>
   </body>
 </html>
