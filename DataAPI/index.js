@@ -16,6 +16,18 @@ app.get('/api/:node', async (req, res) => {
   });
 });
 
+app.get('/api/:node/:id', async (req, res) => {
+  const { node, id } = req.params;
+  const ref = db.ref(`${node}/${id}`);
+  ref.once('value', (snapshot) => {
+    if (snapshot.exists()) {
+      res.json(snapshot.val());
+    } else {
+      res.status(404).json({ error: 'Data not found' });
+    }
+  });
+});
+
 app.post('/api/:node', async (req, res) => {
   const { node } = req.params;
   const data = req.body;

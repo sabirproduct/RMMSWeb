@@ -13,7 +13,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../css/componentstyle.css" />
     <!-- Optional: Link to external CSS -->
     <script src="../js/util.js"></script>
     <!-- Bootstrap JS -->
@@ -33,6 +33,7 @@
         border-radius: 0.5rem;
       }
     </style>
+   <div id="mainContent">
     <form method="POST" class="needs-validation" novalidate>
       <div class="mb-5">
         <div class="row">
@@ -397,8 +398,8 @@
               padding: 10px;
               text-align: center;
               width: 100%;
-              height: 100%;
-              overflow: hidden;
+              max-height: 215px;
+              overflow: scroll;
             "
             src=""
             alt="TR Slip Preview"
@@ -406,10 +407,11 @@
           >        
           </div>
         </div>
-      </div>
+      
 
       <script>
-        let TRSlipImageURL="";
+        let TRSlipImageURL=""; // Initialize the variable to store the image URL
+        // Handle file selection and upload event
         document
           .getElementById("trSlipUpload")
           .addEventListener("change", function (event) {
@@ -472,6 +474,10 @@
       </button>
       <button type="reset" class="btn btn-secondary">Reset</button>
     </form>
+  </div>
+  <div id="loaderWrapper" style="display: none;">
+    <div id="loader" class="spinner-4"></div>
+  </div>  
     <script>
       // Get Customer List from server
       var customers = parent.GetFromServer("customers");
@@ -535,7 +541,7 @@
         const truckNumber = document.getElementById("truckNumber").value;
         const totalQuantityTR = document.getElementById("totalQuantityTR").value;
         const dustAndWet = document.getElementById("dustAndWet").value;
-        const trSlipUpload = document.getElementById("trSlipUpload").files[0];
+        const trSlipUploadUrl = imageUrl;
         const totalPrice = document.getElementById("totalPrice").value;
         
         let paddyInformation = [];
@@ -577,8 +583,9 @@
         };
                  
         // Send the data to the server using AJAX or Fetch API
-        parent.Post2Server(data,"purchase");
-        alert("Purchase transaction added successfully!");
+        const trid=parent.Post2Server(data,"purchase");
+        // Show success message or redirect to another page
+        alert("Purchase transaction added successfully! TR NO: ",trid.id);
         // Reset the form after submission
         document.querySelector("form").reset();
         document.getElementById("entriesTable").querySelector("tbody").innerHTML = ""; // Clear the table body
@@ -682,8 +689,13 @@
         .addEventListener("input", updateCalculationDetails);
 
 
-        // Upload Image into Cloudinary
+        var imageUrl=0;
+    // Upload Image into Cloudinary
     async function uploadImage(file) {
+    // show loader and hide the maincontent
+      document.getElementById("mainContent").style.display = "none";
+      document.getElementById("loaderWrapper").style.display = "block";
+
       if (!file) {
         alert("Please select an image file to upload.");
         return;
@@ -693,6 +705,7 @@
       const formData = new FormData();
       formData.append("file", file);
       formData.append("upload_preset", "unsigned_preset"); // Change this to your preset
+      formData.append("folder", "RMMS/TRBills"); // Optional: Specify a folder in Cloudinary
 
       try {
         const response = await axios.post(
@@ -700,13 +713,17 @@
           formData
         );
 
-        const imageUrl = response.data.secure_url;
+        imageUrl = response.data.secure_url;
 
         // Show the uploaded image and URL
         TRSlipImageURL = imageUrl;
         document.getElementById("trSlipPreview").src = imageUrl;
 
         // You can now save `imageUrl` to your database
+
+        // Hide loader and show the maincontent
+        document.getElementById("loaderWrapper").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
 
       } catch (error) {
         console.error("Upload failed:", error);

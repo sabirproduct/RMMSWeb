@@ -57,32 +57,34 @@
   </div>
 
   <script>
-    const invoiceData = {
-      dustAndWet: "40",
-      paddyInformation: [
-        {
-          actualQuantity: "1001.00",
-          amountAfterTR: "20938.00",
-          bags: "20",
-          moisture: "0.00%",
-          paddyType: "36 (৩৬) (Low (কমা))",
-          rate: "1255.00"
-        },
-        {
-          actualQuantity: "11009.00",
-          amountAfterTR: "232106.00",
-          bags: "220",
-          moisture: "0.00%",
-          paddyType: "36 (৩৬)",
-          rate: "1265.00"
-        }
-      ],
-      supplierId: "-ONtF-iWh9D2SK9eXNLa ",
-      totalPrice: "253044.00",
-      totalQuantityTR: "12050",
-      transactionDate: "2025-04-20",
-      truckNumber: "wb43d4545"
-    };
+    const invoiceData = parent.GetFromServer("purchase");
+    alert(JSON.stringify(invoiceData)); // For debugging purposes
+    // {
+    //   dustAndWet: "40",
+    //   paddyInformation: [
+    //     {
+    //       actualQuantity: "1001.00",
+    //       amountAfterTR: "20938.00",
+    //       bags: "20",
+    //       moisture: "0.00%",
+    //       paddyType: "36 (৩৬) (Low (কমা))",
+    //       rate: "1255.00"
+    //     },
+    //     {
+    //       actualQuantity: "11009.00",
+    //       amountAfterTR: "232106.00",
+    //       bags: "220",
+    //       moisture: "0.00%",
+    //       paddyType: "36 (৩৬)",
+    //       rate: "1265.00"
+    //     }
+    //   ],
+    //   supplierId: "-ONtF-iWh9D2SK9eXNLa ",
+    //   totalPrice: "253044.00",
+    //   totalQuantityTR: "12050",
+    //   transactionDate: "2025-04-20",
+    //   truckNumber: "wb43d4545"
+    // };
 
     document.getElementById("transactionDate").textContent = invoiceData.transactionDate;
     document.getElementById("truckNumber").textContent = invoiceData.truckNumber;
