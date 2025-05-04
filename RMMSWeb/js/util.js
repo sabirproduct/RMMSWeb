@@ -1,3 +1,5 @@
+// Function to convert a number to words in Bengali
+// This function converts a number to its equivalent word representation in Bengali.
 function numberToWords(num) {
     const a = [
         '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
@@ -13,7 +15,8 @@ function numberToWords(num) {
     if (num < 10000000) return numberToWords(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 !== 0 ? ' ' + numberToWords(num % 100000) : '');
     return numberToWords(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 !== 0 ? ' ' + numberToWords(num % 10000000) : '');
 }
-
+// Function to convert a Gregorian date to Bengali calendar date
+// The Bengali calendar is a lunisolar calendar used in the Indian subcontinent, primarily in Bangladesh and the Indian state of West Bengal.
 function convertToBengaliCalendar(year, month, day) {
     // Convert Gregorian date to Bengali calendar date using base date 15-04-2025 as 1-Boishakh-1432
     const bengaliMonths = [
@@ -60,17 +63,21 @@ function convertToBengaliCalendar(year, month, day) {
     const bengaliDayStr = convertToBengaliDigits(bengaliDay);
     const bengaliYearStr = convertToBengaliDigits(bengaliYear);
 
-    return `${bengaliDayStr}-${bengaliMonths[bengaliMonth - 1]}-${bengaliYearStr} (বাংলা ক্যালেন্ডার)`;
+    return `${bengaliDayStr}-${bengaliMonths[bengaliMonth - 1]}-${bengaliYearStr}`;
 }
-
-
-function GetQueryStringVar(_name, _keyvalpairs) {
-    for (var i = 0; i < _keyvalpairs.length; i++) {
-        var _param = _keyvalpairs[i].split('=');
-        if (_param[0].toLowerCase() === _name) {
-            return _param[1];
-        }
-    }
-    return null;
-}
-
+// Function to filter a JSON array based on a search term and specific fields
+// This function filters a JSON array based on a search term and specific fields.
+// It returns a new array containing only the objects that match the search term in any of the specified fields.
+// The function takes three parameters: jsonArray (the array to filter), searchTerm (the term to search for), and fields (the fields to check for the search term).
+// The function returns the filtered array.
+function filterJsonArray(jsonArray, searchTerm, fields) {
+    if (!searchTerm.trim()) return jsonArray; // No filtering if input is empty
+  
+    const term = searchTerm.toLowerCase();
+   console.log(term);
+    return jsonArray.filter(item =>
+      fields.some(field =>
+        item[field]?.toString().toLowerCase().includes(term)
+      )
+    );
+  }

@@ -7,7 +7,13 @@ let Frame = function (FrameObject) {
     let iframeSrc = '';
     let json = FrameObject.json? FrameObject.json : '';
     // let iconClass = 'fa-duotone fa-chart-pie-simple';
-    iframeSrc = `./components/${FrameObject.pageName}.html?json=${json}`;
+    if(FrameObject.json){
+        iframeSrc = `./components/${FrameObject.pageName}.html?json=${FrameObject.json}`;
+    }
+    else{
+        iframeSrc = `./components/${FrameObject.pageName}.html`;
+    }
+    
     _Frame.width = window.innerWidth;
     _Frame.autoOpen = false;
     _Frame.height = window.innerHeight;

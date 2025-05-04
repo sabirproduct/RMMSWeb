@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Payment</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+  <style>
+    body { background: #f8f9fa; }
+    .payment-box {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.07);
+      max-width: 500px;
+      margin: 40px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-box">
+    <h3 class="mb-4 text-center">Add Payment</h3>
+    <form class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="customer" class="form-label">Select Customer</label>
+        <select id="customer" name="customer" class="form-select select2" required>
+          <option value="">Select a customer</option>
+        </select>
+        <div class="invalid-feedback">Please select a customer.</div>
+      </div>
+      <div class="mb-3">
+        <label for="paymentType" class="form-label">Payment Type</label>
+        <select id="paymentType" name="paymentType" class="form-select" required>
+          <option value="">Select type</option>
+          <option value="credit">Credit (Receive from Customer)</option>
+          <option value="debit">Debit (Pay to Customer)</option>
+        </select>
+        <div class="invalid-feedback">Please select payment type.</div>
+      </div>
+      <div class="mb-3">
+        <label for="amount" class="form-label">Amount (₹)</label>
+        <input type="number" id="amount" name="amount" class="form-control" min="1" step="0.01" required placeholder="Enter amount">
+        <div class="invalid-feedback">Please enter a valid amount.</div>
+      </div>
+      <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+        <input type="date" id="date" name="date" class="form-control" required>
+        <div class="invalid-feedback">Please select a date.</div>
+      </div>
+      <div class="mb-3">
+        <label for="desc" class="form-label">Description (optional)</label>
+        <input type="text" id="desc" name="desc" class="form-control" maxlength="100" placeholder="Payment details">
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Save Payment</button>
+    </form>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script>
+    // Populate customer dropdown from server
+    let customers = parent.GetFromServer ? parent.GetFromServer("customers") : {};
+    customers = Object.keys(customers).map(key => ({ id: key, ...customers[key] }));
+    let options = '<option value="">Select a customer</option>';
+    customers.forEach(c => {
+      options += `<option value="${c.id}">${c.customerName} (${c.mobile1 || ''})</option>`;
+    });
+    document.getElementById('customer').innerHTML = options;
+    $('.select2').select2();
+
+    // Form validation and submit
+    document.querySelector('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (!this.checkValidity()) {
+        this.classList.add('was-validated');
+        return;
+      }
+      const formData = new FormData(this);
+      const data = {
+        targetId: formData.get('customer'),
+        date: formData.get('date'),
+        desc: `Payment: ${formData.get('desc') || ''}`,
+        debit: formData.get('paymentType') === 'debit' ? formData.get('amount') : 0,
+        credit: formData.get('paymentType') === 'credit' ? formData.get('amount') : 0,
+        purchase: 0,
+        sell: 0
+      };
+      parent.Post2Server && parent.Post2Server(data, "transactions");
+      alert('Payment saved!');
+      this.reset();
+      this.classList.remove('was-validated');
+    });
+  </script>
+</body>
+</html>

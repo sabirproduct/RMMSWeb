@@ -9,6 +9,7 @@
 
   <!-- html2pdf -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="../js/util.js"></script>
 
   <style>
     .ledger-box {
@@ -40,6 +41,8 @@
         <tr>
           <th>Date</th>
           <th>Description</th>
+          <th>Sell (₹)</th>
+          <th>Purchase (₹)</th>
           <th>Debit (₹)</th>
           <th>Credit (₹)</th>
           <th>Balance (₹)</th>
@@ -51,6 +54,8 @@
       <tfoot class="table-light">
         <tr>
           <td colspan="2"><strong>Total</strong></td>
+          <td id="totalSell">0</td>
+          <td id="totalPurchase">0</td>
           <td id="totalDebit">0</td>
           <td id="totalCredit">0</td>
           <td id="finalBalance" class="text-success fw-bold">0</td>
@@ -66,35 +71,44 @@
 </div>
 
 <script>
-  
-  const data = parent.GetFromServer('ledger').customer1;
-    console.log(data);
-  
-  document.getElementById("custName").textContent = data.name;
-  document.getElementById("custPhone").textContent = data.phone;
-  document.getElementById("custAddress").textContent = data.address;
+  var customerData = JSON.parse(atob(window.location.search.substring(1).split('=')[1]));
+  const data = parent.GetFromServer('transactions');
+  let arrayData = Object.values(data);
+  let filteredData = filterJsonArray(arrayData, customerData.id,['targetId']);
+
+  // Get customer details  
+  document.getElementById("custName").textContent = customerData.customerName;
+  document.getElementById("custPhone").textContent = customerData.mobile1;
+  document.getElementById("custAddress").textContent = customerData.address;
 
   const table = document.getElementById("ledgerTable");
-  let balance = 0, totalDebit = 0, totalCredit = 0;
+  let balance = 0, totalDebit = 0, totalCredit = 0; totalPurchase = 0, totalSell = 0;
 
-  data.transactions.forEach(txn => {
-    balance += (txn.debit || 0) - (txn.credit || 0);
-    totalDebit += txn.debit || 0;
-    totalCredit += txn.credit || 0;
+   filteredData.forEach(txn => {
+    balance += (parseFloat(txn.debit) || 0) - (parseFloat(txn.credit) || 0);
+    balance += (parseFloat(txn.sell) || 0) - (parseFloat(txn.purchase) || 0);
+    totalDebit += parseFloat(txn.debit) || 0;
+    totalCredit += parseFloat(txn.credit) || 0;
+    totalPurchase += parseFloat(txn.purchase) || 0;
+    totalSell += parseFloat(txn.sell) || 0;
 
     const row = `<tr>
       <td>${txn.date}</td>
       <td>${txn.desc}</td>
-      <td>${txn.debit.toFixed(2)}</td>
-      <td>${txn.credit.toFixed(2)}</td>
-      <td>${balance.toFixed(2)}</td>
+      <td>${txn.sell == 0 ? '' : `₹${txn.sell}`}</td>
+      <td>${txn.purchase == 0 ? '' : `₹${txn.purchase}`}</td>
+      <td>${txn.debit == 0 ? '' : `₹${txn.debit}`}</td>
+      <td>${txn.credit == 0 ? '' : `₹${txn.credit}`}</td>
+      <td>₹${balance}</td>
     </tr>`;
     table.innerHTML += row;
   });
 
-  document.getElementById("totalDebit").textContent = totalDebit.toFixed(2);
-  document.getElementById("totalCredit").textContent = totalCredit.toFixed(2);
-  document.getElementById("finalBalance").textContent = balance.toFixed(2);
+  document.getElementById("totalDebit").textContent = `₹${totalDebit}`;
+  document.getElementById("totalCredit").textContent = `₹${totalCredit}`;
+  document.getElementById("totalSell").textContent = `₹${totalSell}`;
+  document.getElementById("totalPurchase").textContent = `₹${totalPurchase}`;
+  document.getElementById("finalBalance").textContent = `₹${balance}`;
 
   // ✅ Export to PDF
   function downloadPDF() {

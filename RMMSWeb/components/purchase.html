@@ -33,259 +33,262 @@
         border-radius: 0.5rem;
       }
     </style>
-   <div id="mainContent">
-    <form method="POST" class="needs-validation" novalidate>
-      <div class="mb-5">
-        <div class="row">
-          <div class="col-6">
-            <label for="supplierName" class="form-label font-weight-bold"
-              >Supplier Name:</label
-            >
-            <select
-              id="supplierName"
-              name="supplierName"
-              class="form-select select2"
-              required
-            >
-              <option value="" disabled>Select a supplier</option>
-              <!-- Options will be populated dynamically with JavaScript -->
-            </select>
-          </div>
-          <div class="col-6">
-            <label for="transactionDate" class="form-label font-weight-bold"
-              >Transaction Date:</label
-            >
-            <input
-              type="date"
-              id="transactionDate"
-              name="transactionDate"
-              class="form-control"
-              required
-            />
-            <div
-              class="form-text"
-              id="bengaliDateDisplay"
-              style="
-                font-family: 'Noto Sans Bengali', sans-serif;
-                color: #6c757d;
-              "
-            ></div>
-          </div>
-          <script>
-            document
-              .getElementById("transactionDate")
-              .addEventListener("input", function () {
-                const dateValue = this.value;
-                if (dateValue) {
-                  const [year, month, day] = dateValue.split("-").map(Number);
-                  const bengaliDate = convertToBengaliCalendar(
-                    year,
-                    month,
-                    day
-                  );
-                  document.getElementById(
-                    "bengaliDateDisplay"
-                  ).textContent = `তারিখ: ${bengaliDate}`;
-                } else {
-                  document.getElementById("bengaliDateDisplay").textContent =
-                    "";
-                }
-              });
-          </script>
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="truckNumber" class="form-label">Truck Number:</label>
-        <input
-          type="text"
-          id="truckNumber"
-          name="truckNumber"
-          class="form-control"
-          required
-          placeholder="Enter truck number"
-          style="text-transform: uppercase"
-        />
-      </div>
-      <label class="form-label font-weight-bold">Paddy Information</label>
-      <div class="card card-shadow mb-3">
-        <div class="container">
-          <div class="row mb-3">
+    <div id="mainContent">
+      <form method="POST" class="needs-validation" novalidate>
+        <div class="mb-5">
+          <div class="row">
             <div class="col-6">
-              <label for="paddyType" class="form-label">Paddy Type:</label>
+              <label for="supplierName" class="form-label font-weight-bold"
+                >Supplier Name:</label
+              >
               <select
-                id="paddyType"
-                name="paddyType"
-                class="form-control"
+                id="supplierName"
+                name="supplierName"
+                class="form-select select2"
                 required
               >
+                <option value="" disabled>Select a supplier</option>
                 <!-- Options will be populated dynamically with JavaScript -->
               </select>
             </div>
             <div class="col-6">
-              <label for="paddyQuality" class="form-label"
-                >Paddy Quality:</label
+              <label for="transactionDate" class="form-label font-weight-bold"
+                >Transaction Date:</label
               >
-              <select
-                name="paddyQuality"
-                id="paddyQuality"
+              <input
+                type="date"
+                id="transactionDate"
+                name="transactionDate"
                 class="form-control"
-              ></select>
+                required
+              />
+              <div
+                class="form-text"
+                id="bengaliDateDisplay"
+                style="
+                  font-family: 'Noto Sans Bengali', sans-serif;
+                  color: #6c757d;
+                "
+              ></div>
             </div>
+            <script>
+              document
+                .getElementById("transactionDate")
+                .addEventListener("input", function () {
+                  const dateValue = this.value;
+                  if (dateValue) {
+                    const [year, month, day] = dateValue.split("-").map(Number);
+                    const bengaliDate = convertToBengaliCalendar(
+                      year,
+                      month,
+                      day
+                    );
+                    document.getElementById(
+                      "bengaliDateDisplay"
+                    ).textContent = `তারিখ: ${bengaliDate}`;
+                  } else {
+                    document.getElementById("bengaliDateDisplay").textContent =
+                      "";
+                  }
+                });
+            </script>
           </div>
-          <script>
-            var allPaddy = parent.GetFromServer("products").Paddy;
-            var allPaddyType = allPaddy.Type;
-            var allPaddyQuality = allPaddy.Quality;
-            var selection = `<option value="" disabled>Select a paddy type</option>`;
-            var selection2 = `<option value="">Select a Quality</option>`;
-            // Loop through key-value pairs in the object
-            for (const [key, value] of Object.entries(allPaddyType)) {
-              selection += `<option value="${key}">${value}</option>`;
-            }
-            // Populate the paddyType select element with paddy options
-            document.getElementById("paddyType").innerHTML = selection;
-
-            // Loop through key-value pairs in the object
-            for (const [key, value] of Object.entries(allPaddyQuality)) {
-              selection2 += `<option value="${key}">${value}</option>`;
-            }
-            // Populate the paddyType select element with paddy options
-            document.getElementById("paddyQuality").innerHTML = selection2;
-          </script>
-
-          <div class="mb-3">
-            <div class="row">
-              <div class="col-4">
-                <label for="quantity" class="form-label">Number of Bags:</label>
-                <div class="input-group">
-                  <span class="input-group-text">🛍️</span>
-                  <input
-                    type="number"
-                    id="quantity"
-                    class="form-control"
-                    min="1"
-                    step="1"
-                    placeholder="Enter number of bags"
-                  />
-                </div>
+        </div>
+        <div class="mb-3">
+          <label for="truckNumber" class="form-label">Truck Number:</label>
+          <input
+            type="text"
+            id="truckNumber"
+            name="truckNumber"
+            class="form-control"
+            required
+            placeholder="Enter truck number"
+            style="text-transform: uppercase"
+          />
+        </div>
+        <label class="form-label font-weight-bold">Paddy Information</label>
+        <div class="card card-shadow mb-3">
+          <div class="container">
+            <div class="row mb-3">
+              <div class="col-6">
+                <label for="paddyType" class="form-label">Paddy Type:</label>
+                <select
+                  id="paddyType"
+                  name="paddyType"
+                  class="form-control"
+                  required
+                >
+                  <!-- Options will be populated dynamically with JavaScript -->
+                </select>
               </div>
-              <div class="col-4">
-                <div class="row">
-                  <label for="rate" class="form-label">Rate per Bag:</label>
+              <div class="col-6">
+                <label for="paddyQuality" class="form-label"
+                  >Paddy Quality:</label
+                >
+                <select
+                  name="paddyQuality"
+                  id="paddyQuality"
+                  class="form-control"
+                ></select>
+              </div>
+            </div>
+            <script>
+              var allPaddy = parent.GetFromServer("products").Paddy;
+              var allPaddyType = allPaddy.Type;
+              var allPaddyQuality = allPaddy.Quality;
+              var selection = `<option value="" disabled>Select a paddy type</option>`;
+              var selection2 = `<option value="">Select a Quality</option>`;
+              // Loop through key-value pairs in the object
+              for (const [key, value] of Object.entries(allPaddyType)) {
+                selection += `<option value="${key}">${value}</option>`;
+              }
+              // Populate the paddyType select element with paddy options
+              document.getElementById("paddyType").innerHTML = selection;
+
+              // Loop through key-value pairs in the object
+              for (const [key, value] of Object.entries(allPaddyQuality)) {
+                selection2 += `<option value="${key}">${value}</option>`;
+              }
+              // Populate the paddyType select element with paddy options
+              document.getElementById("paddyQuality").innerHTML = selection2;
+            </script>
+
+            <div class="mb-3">
+              <div class="row">
+                <div class="col-4">
+                  <label for="quantity" class="form-label"
+                    >Number of Bags:</label
+                  >
                   <div class="input-group">
-                    <span class="input-group-text">₹</span>
+                    <span class="input-group-text">🛍️</span>
                     <input
                       type="number"
-                      id="rate"
+                      id="quantity"
                       class="form-control"
-                      step="0.01"                      
-                      placeholder="Enter rate"
+                      min="1"
+                      step="1"
+                      placeholder="Enter number of bags"
+                    />
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="row">
+                    <label for="rate" class="form-label">Rate per Bag:</label>
+                    <div class="input-group">
+                      <span class="input-group-text">₹</span>
+                      <input
+                        type="number"
+                        id="rate"
+                        class="form-control"
+                        step="0.01"
+                        placeholder="Enter rate"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <label for="moisture" class="form-label">Moisture %:</label>
+                  <div class="input-group">
+                    <span class="input-group-text">💧</span>
+                    <input
+                      type="number"
+                      id="moisture"
+                      class="form-control"
+                      min="0"
+                      step="0.01"
+                      placeholder="Enter moisture percentage"
                     />
                   </div>
                 </div>
               </div>
-              <div class="col-4">
-                <label for="moisture" class="form-label">Moisture %:</label>
-                <div class="input-group">
-                  <span class="input-group-text">💧</span>
-                  <input
-                    type="number"
-                    id="moisture"
-                    class="form-control"
-                    min="0"
-                    step="0.01"                    
-                    placeholder="Enter moisture percentage"
-                  />
-                </div>
-              </div>
+            </div>
+
+            <div class="mb-3">
+              <button type="button" class="btn btn-success" id="addEntryButton">
+                Add Entry
+              </button>
+            </div>
+
+            <div class="mb-3">
+              <table class="table table-bordered" id="entriesTable">
+                <thead>
+                  <tr>
+                    <th>Paddy</th>
+                    <th>Number of Bags</th>
+                    <th>Rate per Bag</th>
+                    <th>Moisture %</th>
+                    <th>Actual Quantity</th>
+                    <th>Amount After TR</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Dynamic rows will be added here -->
+                </tbody>
+              </table>
             </div>
           </div>
-
-          <div class="mb-3">
-            <button type="button" class="btn btn-success" id="addEntryButton">
-              Add Entry
-            </button>
-          </div>
-
-          <div class="mb-3">
-            <table class="table table-bordered" id="entriesTable">
-              <thead>
-                <tr>
-                  <th>Paddy</th>
-                  <th>Number of Bags</th>
-                  <th>Rate per Bag</th>
-                  <th>Moisture %</th>
-                  <th>Actual Quantity</th>
-                  <th>Amount After TR</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Dynamic rows will be added here -->
-              </tbody>
-            </table>
-          </div>
         </div>
-      </div>
 
-      <script>
-        // Initialize an empty array to store entries
-        let entries = [];
-        let nextId = 1; // Initialize the next available ID
-        let totalBags = 0; // Initialize total bags
+        <script>
+          // Initialize an empty array to store entries
+          let entries = [];
+          let nextId = 1; // Initialize the next available ID
+          let totalBags = 0; // Initialize total bags
 
-        document
-          .getElementById("addEntryButton")
-          .addEventListener("click", function () {
-            const paddyType = document.getElementById("paddyType").value;
-            const paddyQuality = document.getElementById("paddyQuality").value;
-            const paddyTypeText =
-              document.getElementById("paddyQuality").selectedIndex > 0
-                ? `${
-                    document.getElementById("paddyType").options[
-                      document.getElementById("paddyType").selectedIndex
-                    ].text
-                  } (${
-                    document.getElementById("paddyQuality").options[
-                      document.getElementById("paddyQuality").selectedIndex
-                    ].text
-                  })`
-                : `${
-                    document.getElementById("paddyType").options[
-                      document.getElementById("paddyType").selectedIndex
-                    ].text
-                  }`;
-            const quantity = document.getElementById("quantity").value;
-            const rate = document.getElementById("rate").value;
-            let moisture = document.getElementById("moisture").value;
-            if (!moisture) {
-              moisture = 0;
-            }
+          document
+            .getElementById("addEntryButton")
+            .addEventListener("click", function () {
+              const paddyType = document.getElementById("paddyType").value;
+              const paddyQuality =
+                document.getElementById("paddyQuality").value;
+              const paddyTypeText =
+                document.getElementById("paddyQuality").selectedIndex > 0
+                  ? `${
+                      document.getElementById("paddyType").options[
+                        document.getElementById("paddyType").selectedIndex
+                      ].text
+                    } (${
+                      document.getElementById("paddyQuality").options[
+                        document.getElementById("paddyQuality").selectedIndex
+                      ].text
+                    })`
+                  : `${
+                      document.getElementById("paddyType").options[
+                        document.getElementById("paddyType").selectedIndex
+                      ].text
+                    }`;
+              const quantity = document.getElementById("quantity").value;
+              const rate = document.getElementById("rate").value;
+              let moisture = document.getElementById("moisture").value;
+              if (!moisture) {
+                moisture = 0;
+              }
 
-            if (!paddyType || !quantity || !rate) {
-              alert("Please fill all fields before adding an entry.");
-              return;
-            }
+              if (!paddyType || !quantity || !rate) {
+                alert("Please fill all fields before adding an entry.");
+                return;
+              }
 
-            // Create a JSON object for the new entry with sequential ID
-            const entry = {
-              id: nextId++, // Use the current ID and increment for the next entry
-              paddyType: paddyTypeText,
-              quantity: quantity,
-              rate: parseFloat(rate).toFixed(2),
-              moisture: parseFloat(moisture).toFixed(2),
-            };
+              // Create a JSON object for the new entry with sequential ID
+              const entry = {
+                id: nextId++, // Use the current ID and increment for the next entry
+                paddyType: paddyTypeText,
+                quantity: quantity,
+                rate: parseFloat(rate).toFixed(2),
+                moisture: parseFloat(moisture).toFixed(2),
+              };
 
-            // Push the new entry into the entries array
-            entries.push(entry);
+              // Push the new entry into the entries array
+              entries.push(entry);
 
-            // Render the new entry in the table
-            const tableBody = document
-              .getElementById("entriesTable")
-              .querySelector("tbody");
-            const newRow = document.createElement("tr");
+              // Render the new entry in the table
+              const tableBody = document
+                .getElementById("entriesTable")
+                .querySelector("tbody");
+              const newRow = document.createElement("tr");
 
-            newRow.innerHTML = `
+              newRow.innerHTML = `
                 <td>${entry.paddyType}</td>
                 <td>${entry.quantity}</td>
                 <td>₹${entry.rate}</td>
@@ -297,187 +300,187 @@
                 </td>
             `;
 
-            tableBody.appendChild(newRow);
+              tableBody.appendChild(newRow);
 
-            // Clear input fields
-            document.getElementById("quantity").value = "";
-            document.getElementById("rate").value = "";
-            document.getElementById("moisture").value = "";
-            updateTotalBags();
+              // Clear input fields
+              document.getElementById("quantity").value = "";
+              document.getElementById("rate").value = "";
+              document.getElementById("moisture").value = "";
+              updateTotalBags();
 
-            // Add delete functionality
-            newRow
-              .querySelector(".deleteEntryButton")
-              .addEventListener("click", function (event) {
-                const entryId = event.target.getAttribute("data-id");
+              // Add delete functionality
+              newRow
+                .querySelector(".deleteEntryButton")
+                .addEventListener("click", function (event) {
+                  const entryId = event.target.getAttribute("data-id");
 
-                // Remove the entry from the entries array based on the ID
-                entries = entries.filter(
-                  (entry) => entry.id !== parseInt(entryId)
-                );
+                  // Remove the entry from the entries array based on the ID
+                  entries = entries.filter(
+                    (entry) => entry.id !== parseInt(entryId)
+                  );
 
-                // Remove the row from the table
-                newRow.remove();
+                  // Remove the row from the table
+                  newRow.remove();
 
-                // Reassign IDs to remaining entries to keep them sequential
-                entries.forEach((entry, index) => {
-                  entry.id = index + 1; // Reset IDs starting from 1
+                  // Reassign IDs to remaining entries to keep them sequential
+                  entries.forEach((entry, index) => {
+                    entry.id = index + 1; // Reset IDs starting from 1
+                  });
+
+                  // Update the nextId to the next available ID
+                  nextId =
+                    entries.length > 0 ? entries[entries.length - 1].id + 1 : 1;
+                  updateTotalBags();
                 });
+            });
 
-                // Update the nextId to the next available ID
-                nextId =
-                  entries.length > 0 ? entries[entries.length - 1].id + 1 : 1;
-                updateTotalBags();
-              });
-          });
+          // Function to calculate and update the total bags
+          function updateTotalBags() {
+            totalBags = entries.reduce(
+              (total, entry) => total + entry.quantity,
+              0
+            );
+          }
+        </script>
 
-        // Function to calculate and update the total bags
-        function updateTotalBags() {
-          totalBags = entries.reduce(
-            (total, entry) => total + entry.quantity,
-            0
-          );
-        }
-      </script>
-
-      <div class="row mb-3">
-        <div class="col-6">
-          <div class="mb-3">
-            <label for="totalQuantityTR" class="form-label"
-              >Total Quantity as per TR (KG):</label
-            >
-            <div class="input-group">
-              <span class="input-group-text">⚖️</span>
-              <input
-                type="number"
-                id="totalQuantityTR"
-                name="totalQuantityTR"
-                class="form-control"
-                min="0"
-                step="0.01"
-                required
-                placeholder="Enter total quantity as per TR"
-              />
+        <div class="row mb-3">
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="totalQuantityTR" class="form-label"
+                >Total Quantity as per TR (KG):</label
+              >
+              <div class="input-group">
+                <span class="input-group-text">⚖️</span>
+                <input
+                  type="number"
+                  id="totalQuantityTR"
+                  name="totalQuantityTR"
+                  class="form-control"
+                  min="0"
+                  step="0.01"
+                  required
+                  placeholder="Enter total quantity as per TR"
+                />
+              </div>
             </div>
-          </div>
-          <div class="mb-3">
-            <label for="dustAndWet" class="form-label"
-              >Dust and Wet (KG):</label
-            >
-            <div class="input-group">
-              <span class="input-group-text">🌫️</span>
-              <input
-                type="number"
-                id="dustAndWet"
-                name="dustAndWet"
-                class="form-control"
-                min="0"
-                step="0.01"
-                required
-                placeholder="Enter dust and wet weight"
-              />
+            <div class="mb-3">
+              <label for="dustAndWet" class="form-label"
+                >Dust and Wet (KG):</label
+              >
+              <div class="input-group">
+                <span class="input-group-text">🌫️</span>
+                <input
+                  type="number"
+                  id="dustAndWet"
+                  name="dustAndWet"
+                  class="form-control"
+                  min="0"
+                  step="0.01"
+                  required
+                  placeholder="Enter dust and wet weight"
+                />
+              </div>
             </div>
+            <label for="trSlipUpload" class="form-label">Upload TR Slip:</label>
+            <input
+              type="file"
+              id="trSlipUpload"
+              name="trSlipUpload"
+              class="form-control"
+              accept="image/*"
+            />
           </div>
-          <label for="trSlipUpload" class="form-label">Upload TR Slip:</label>
-          <input
-            type="file"
-            id="trSlipUpload"
-            name="trSlipUpload"
-            class="form-control"
-            accept="image/*"
-            required
-          />
-        </div>
 
-        <div class="mb-3 col-6">
-          <label class="form-label">TR Slip Preview:</label>
-          <img
-            id="trSlipPreview"
-            style="
-              border: 1px solid #ddd;
-              padding: 10px;
-              text-align: center;
-              width: 100%;
-              max-height: 215px;
-              overflow: scroll;
-            "
-            src=""
-            alt="TR Slip Preview"
-            class="img-fluid"
-          >        
+          <div class="mb-3 col-6">
+            <label class="form-label">TR Slip Preview:</label>
+            <img
+              id="trSlipPreview"
+              style="
+                border: 1px solid #ddd;
+                padding: 10px;
+                text-align: center;
+                width: 100%;
+                max-height: 215px;
+                overflow: scroll;
+              "
+              src=""
+              alt="TR Slip Preview"
+              class="img-fluid"
+            />
           </div>
         </div>
-      
 
-      <script>
-        let TRSlipImageURL=""; // Initialize the variable to store the image URL
-        // Handle file selection and upload event
-        document
-          .getElementById("trSlipUpload")
-          .addEventListener("change", function (event) {
-            const file = event.target.files[0];
-            uploadImage(file);
-          });
-      </script>
+        <script>
+          let TRSlipImageURL = ""; // Initialize the variable to store the image URL
+          // Handle file selection and upload event
+          document
+            .getElementById("trSlipUpload")
+            .addEventListener("change", function (event) {
+              const file = event.target.files[0];
+              uploadImage(file);
+            });
+        </script>
 
-      <div class="mb-3">
-        <label for="totalPrice" class="form-label">Total Price:</label>
-        <div class="input-group">
-          <span class="input-group-text">₹</span>
-          <input
-            type="text"
-            id="totalPrice"
-            name="totalPrice"
-            class="form-control"
-            readonly
-            style="background-color: #f8f9fa; color: #6c757d"
-          />
+        <div class="mb-3">
+          <label for="totalPrice" class="form-label">Total Price:</label>
+          <div class="input-group">
+            <span class="input-group-text">₹</span>
+            <input
+              type="text"
+              id="totalPrice"
+              name="totalPrice"
+              class="form-control"
+              readonly
+              style="background-color: #f8f9fa; color: #6c757d"
+            />
+          </div>
+          <div class="form-text">
+            <strong id="totalPriceDisplay">Total Price: ₹0.00</strong>
+            <br />
+            <em id="totalPriceInWords"
+              >Total Price in Words: Zero Rupees Only</em
+            >
+            <br />
+            <small id="calculationDetails">
+              <strong>Calculation Details:</strong>
+              <ul>
+                <li>
+                  Original Quantity:
+                  <span id="originalQuantityDisplay">0</span> KG
+                </li>
+                <li>
+                  Total Moisture Deduction:
+                  <span id="moistureDeductionDisplay">0</span> KG
+                </li>
+                <li>
+                  Total Dust and Wet Deduction:
+                  <span id="dustAndWetDeductionDisplay">0</span> KG
+                </li>
+                <li>
+                  Total Bag :
+                  <span id="totalBagDisplay">0</span> Bags
+                </li>
+                <li>
+                  <b>Net Quantity: <span id="netQuantityDisplay">0</span> KG</b>
+                </li>
+              </ul>
+            </small>
+          </div>
         </div>
-        <div class="form-text">
-          <strong id="totalPriceDisplay">Total Price: ₹0.00</strong>
-          <br />
-          <em id="totalPriceInWords">Total Price in Words: Zero Rupees Only</em>
-          <br />
-          <small id="calculationDetails">
-            <strong>Calculation Details:</strong>
-            <ul>
-              <li>
-                Original Quantity:
-                <span id="originalQuantityDisplay">0</span> KG
-              </li>
-              <li>
-                Total Moisture Deduction:
-                <span id="moistureDeductionDisplay">0</span> KG
-              </li>
-              <li>
-                Total Dust and Wet Deduction:
-                <span id="dustAndWetDeductionDisplay">0</span> KG
-              </li>
-              <li>
-                Total Bag :
-                <span id="totalBagDisplay">0</span> Bags
-              </li>
-              <li>
-                <b>Net Quantity: <span id="netQuantityDisplay">0</span> KG</b>
-              </li>
-            </ul>
-          </small>
-        </div>
-      </div>
 
-      <button
-        type="submit"
-        class="btn btn-primary"
-        onclick="if (document.querySelector('.needs-validation').checkValidity()) { handleSubmit(event); } else { event.preventDefault(); document.querySelector('.needs-validation').classList.add('was-validated'); }"
-      >
-        Add Purchase
-      </button>
-      <button type="reset" class="btn btn-secondary">Reset</button>
-    </form>
-  </div>
-  <div id="loaderWrapper" style="display: none;">
-    <div id="loader" class="spinner-4"></div>
-  </div>  
+        <button
+          type="submit"
+          class="btn btn-primary"
+          onclick="if (document.querySelector('.needs-validation').checkValidity()) { handleSubmit(event); } else { event.preventDefault(); document.querySelector('.needs-validation').classList.add('was-validated'); }"
+        >
+          Add Purchase
+        </button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+      </form>
+    </div>
+    <div id="loaderWrapper" style="display: none">
+      <div id="loader" class="spinner-4"></div>
+    </div>
     <script>
       // Get Customer List from server
       var customers = parent.GetFromServer("customers");
@@ -536,14 +539,15 @@
 
         // preapre the form data
         const supplierId = document.getElementById("supplierName").value;
-        const transactionDate = document.getElementById("transactionDate")
-          .value;
+        const transactionDate =
+          document.getElementById("transactionDate").value;
         const truckNumber = document.getElementById("truckNumber").value;
-        const totalQuantityTR = document.getElementById("totalQuantityTR").value;
+        const totalQuantityTR =
+          document.getElementById("totalQuantityTR").value;
         const dustAndWet = document.getElementById("dustAndWet").value;
         const trSlipUploadUrl = imageUrl;
         const totalPrice = document.getElementById("totalPrice").value;
-        
+
         let paddyInformation = [];
 
         const tableBody = document
@@ -552,66 +556,87 @@
 
         const row = tableBody.querySelectorAll("tr");
         row.forEach((row) => {
-            const paddyType = row.cells[0].textContent;
-            const bags = row.cells[1].textContent;
-            const rate = row.cells[2].textContent.replace("₹", "");
-            const moisture = row.cells[3].textContent;
-            const actualQuantity = row.cells[4].textContent;
-            const amountAfterTR = row.cells[5].textContent.replace("₹", "");
-    
-            // Add the entry to the entries array
-            paddyInformation.push({
-                paddyType: paddyType,
-                bags: bags,
-                rate: rate,
-                moisture: moisture,
-                actualQuantity: actualQuantity,
-                amountAfterTR: amountAfterTR,
-            });
+          const paddyType = row.cells[0].textContent;
+          const bags = row.cells[1].textContent;
+          const rate = row.cells[2].textContent.replace("₹", "");
+          const moisture = row.cells[3].textContent;
+          const actualQuantity = row.cells[4].textContent;
+          const amountAfterTR = row.cells[5].textContent.replace("₹", "");
+
+          // Add the entry to the entries array
+          paddyInformation.push({
+            paddyType: paddyType,
+            bags: bags,
+            rate: rate,
+            moisture: moisture,
+            actualQuantity: actualQuantity,
+            amountAfterTR: amountAfterTR,
+          });
         });
-       
+
         // cretate a json to save the transaction
         const data = {
-          supplierId: supplierId,
+          customerId: supplierId,
           transactionDate: transactionDate,
           truckNumber: truckNumber,
           totalQuantityTR: totalQuantityTR,
           dustAndWet: dustAndWet,
-          trSlipUpload: trSlipUpload,
+          trSlipUpload: trSlipUploadUrl,
           paddyInformation: paddyInformation,
           totalPrice: totalPrice,
         };
-                 
+
         // Send the data to the server using AJAX or Fetch API
-        const trid=parent.Post2Server(data,"purchase");
-        // Show success message or redirect to another page
-        alert("Purchase transaction added successfully! TR NO: ",trid.id);
+        let trid = parent.Post2Server(data, "purchase");
+        // update ledger with the new transaction
+        let transactionData = {
+          id: trid.id,
+          date: transactionDate,
+          targetId: supplierId,
+          desc: "Purchase: "+ document.getElementById("totalBagDisplay").textContent + " Bags",
+          purchase: totalPrice,
+          credit: 0,
+          debit: 0,
+          sell: 0,
+        };
+
+        parent.Post2Server(transactionData, "transactions");
+       
         // Reset the form after submission
         document.querySelector("form").reset();
-        document.getElementById("entriesTable").querySelector("tbody").innerHTML = ""; // Clear the table body
+        document
+          .getElementById("entriesTable")
+          .querySelector("tbody").innerHTML = ""; // Clear the table body
         document.getElementById("trSlipPreview").innerHTML =
           "<em>No image uploaded</em>"; // Clear the image preview
         document.getElementById("totalPrice").value = ""; // Clear the total price field
         document.getElementById("totalPriceDisplay").textContent =
           "Total Price: ₹0.00"; // Clear the total price display
         document.getElementById("totalPriceInWords").textContent =
-            "Total Price in Words: Zero Rupees Only"; // Clear the total price in words
+          "Total Price in Words: Zero Rupees Only"; // Clear the total price in words
         document.getElementById("originalQuantityDisplay").textContent = "0"; // Clear the original quantity display
         document.getElementById("moistureDeductionDisplay").textContent = "0"; // Clear the moisture deduction display
         document.getElementById("dustAndWetDeductionDisplay").textContent = "0"; // Clear the dust and wet deduction display
         document.getElementById("totalBagDisplay").textContent = "0"; // Clear the total bag display
         document.getElementById("netQuantityDisplay").textContent = "0"; // Clear the net quantity display
-           
+
+        // Show success message or redirect to another page
+        alert("Purchase transaction added successfully!");
+
         // redirect to purchaseinvoice frame with current data
         let frameObject = {};
-            frameObject.applicationName = 'framewithoutfilter';
-            frameObject.title = "Purchase Invoice";
-            frameObject.pageName = "purchaseInvoice";
-            if (typeof parent.createFrame === 'function') {
-                parent.createFrame(frameObject);
-            } else {
-                console.error('createFrame function is not accessible or defined in the parent frame.');
-            }
+        frameObject.title = "Purchase Invoice";
+        frameObject.pageName = "purchaseInvoice";
+        var jsonObject = {};
+        jsonObject.id = trid.id;
+        frameObject.json = btoa(JSON.stringify(jsonObject));
+        if (typeof parent.createFrame === "function") {
+          parent.createFrame(frameObject);
+        } else {
+          console.error(
+            "createFrame function is not accessible or defined in the parent frame."
+          );
+        }
       }
 
       function updateCalculationDetails() {
@@ -688,48 +713,46 @@
         .getElementById("dustAndWet")
         .addEventListener("input", updateCalculationDetails);
 
+      var imageUrl = 0;
+      // Upload Image into Cloudinary
+      async function uploadImage(file) {
+        // show loader and hide the maincontent
+        document.getElementById("mainContent").style.display = "none";
+        document.getElementById("loaderWrapper").style.display = "block";
 
-        var imageUrl=0;
-    // Upload Image into Cloudinary
-    async function uploadImage(file) {
-    // show loader and hide the maincontent
-      document.getElementById("mainContent").style.display = "none";
-      document.getElementById("loaderWrapper").style.display = "block";
+        if (!file) {
+          alert("Please select an image file to upload.");
+          return;
+        }
+        // Create a FormData object to send the file
 
-      if (!file) {
-        alert("Please select an image file to upload.");
-        return;
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "unsigned_preset"); // Change this to your preset
+        formData.append("folder", "RMMS/TRBills"); // Optional: Specify a folder in Cloudinary
+
+        try {
+          const response = await axios.post(
+            "https://api.cloudinary.com/v1_1/dxy1gzg9d/image/upload", // Replace with your Cloud name
+            formData
+          );
+
+          imageUrl = response.data.secure_url;
+
+          // Show the uploaded image and URL
+          TRSlipImageURL = imageUrl;
+          document.getElementById("trSlipPreview").src = imageUrl;
+
+          // You can now save `imageUrl` to your database
+
+          // Hide loader and show the maincontent
+          document.getElementById("loaderWrapper").style.display = "none";
+          document.getElementById("mainContent").style.display = "block";
+        } catch (error) {
+          console.error("Upload failed:", error);
+          alert("Upload failed. Check console.");
+        }
       }
-      // Create a FormData object to send the file
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "unsigned_preset"); // Change this to your preset
-      formData.append("folder", "RMMS/TRBills"); // Optional: Specify a folder in Cloudinary
-
-      try {
-        const response = await axios.post(
-          "https://api.cloudinary.com/v1_1/dxy1gzg9d/image/upload", // Replace with your Cloud name
-          formData
-        );
-
-        imageUrl = response.data.secure_url;
-
-        // Show the uploaded image and URL
-        TRSlipImageURL = imageUrl;
-        document.getElementById("trSlipPreview").src = imageUrl;
-
-        // You can now save `imageUrl` to your database
-
-        // Hide loader and show the maincontent
-        document.getElementById("loaderWrapper").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
-
-      } catch (error) {
-        console.error("Upload failed:", error);
-        alert("Upload failed. Check console.");
-      }
-    }
     </script>
   </body>
 </html>

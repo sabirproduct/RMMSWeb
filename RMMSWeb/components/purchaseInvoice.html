@@ -10,9 +10,7 @@
 </head>
 <body>
   <script>
-    var qureryParm = window.location.search.substring(1).split('&');
-    let queryObject = GetQueryStringVar('json', qureryParm);
-    console.log(JSON.parse(queryObject));
+    var data = JSON.parse(atob(window.location.search.substring(1).split('=')[1]));
   </script>
   <div class="container my-4" id="invoice">
     <div class="text-center mb-4">
@@ -63,30 +61,52 @@
   </div>
 
   <script>
-    const invoiceData = parent.GetFromServer("purchase/-OOpGmF51aMpSmI8-yvH");
-
-    document.getElementById("transactionDate").textContent = invoiceData.transactionDate;
-    document.getElementById("truckNumber").textContent = invoiceData.truckNumber;
-    document.getElementById("supplierId").textContent = invoiceData.supplierId;
-    document.getElementById("dustAndWet").textContent = invoiceData.dustAndWet;
-    document.getElementById("totalQuantityTR").textContent = invoiceData.totalQuantityTR;
-    document.getElementById("totalPrice").textContent = invoiceData.totalPrice;
-
-    const tbody = document.getElementById("paddyTableBody");
-
-    invoiceData.paddyInformation.forEach((item, index) => {
+    const invoiceData = parent.GetFromServer(`purchase/${data.id}`);
+    let SupplierInformation ={};
+    setTimeout(function(){
+      if(invoiceData) {
+        SupplierInformation = parent.GetFromServer(`customers/${invoiceData.supplierId}`);
+        console.log(SupplierInformation);
+        if(SupplierInformation) {
+          document.getElementById("supplierId").textContent = SupplierInformation.customerName;
+        } else {
+          document.getElementById("supplierId").textContent = invoiceData.supplierId;
+        }
+      } else {
+        document.getElementById("supplierId").textContent = "No Data Found";
+      }
+      if (invoiceData) {
+        document.getElementById("transactionDate").textContent = invoiceData.transactionDate;
+        document.getElementById("truckNumber").textContent = invoiceData.truckNumber.toUpperCase();
+        document.getElementById("dustAndWet").textContent = invoiceData.dustAndWet;
+        document.getElementById("totalQuantityTR").textContent = invoiceData.totalQuantityTR;
+        document.getElementById("totalPrice").textContent = invoiceData.totalPrice;
+        const tbody = document.getElementById("paddyTableBody");  
+        invoiceData.paddyInformation.forEach((item, index) => {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${index + 1}</td>
         <td>${item.paddyType}</td>
         <td>${item.bags}</td>
         <td>${item.actualQuantity}</td>
-        <td>${item.rate}</td>
+        <td>₹${item.rate}</td>
         <td>${item.moisture}</td>
-        <td>${item.amountAfterTR}</td>
+        <td>₹${item.amountAfterTR}</td>
       `;
       tbody.appendChild(row);
     });
+    }
+      else {
+        document.getElementById("transactionDate").textContent = "No Data Found";
+        document.getElementById("truckNumber").textContent = "No Data Found";
+        document.getElementById("dustAndWet").textContent = "No Data Found";
+        document.getElementById("totalQuantityTR").textContent = "No Data Found";
+        document.getElementById("totalPrice").textContent = "No Data Found";
+      }
+      const tbody = document.getElementById("paddyTableBody");  
+    }, 200);    
+
+    
 
     async function downloadPDF() {
       const { jsPDF } = window.jspdf;
