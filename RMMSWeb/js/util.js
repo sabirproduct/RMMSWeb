@@ -62,3 +62,15 @@ function convertToBengaliCalendar(year, month, day) {
 
     return `${bengaliDayStr}-${bengaliMonths[bengaliMonth - 1]}-${bengaliYearStr} (বাংলা ক্যালেন্ডার)`;
 }
+
+
+function GetQueryStringVar(_name, _keyvalpairs) {
+    for (var i = 0; i < _keyvalpairs.length; i++) {
+        var _param = _keyvalpairs[i].split('=');
+        if (_param[0].toLowerCase() === _name) {
+            return _param[1];
+        }
+    }
+    return null;
+}
+
