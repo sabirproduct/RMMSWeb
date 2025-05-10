@@ -6,6 +6,7 @@
   <title>Add Payment</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+  <script src="../js/util.js"></script>
   <style>
     body { background: #f8f9fa; }
     .payment-box {
@@ -19,77 +20,156 @@
   </style>
 </head>
 <body>
-  <div class="payment-box">
-    <h3 class="mb-4 text-center">Add Payment</h3>
-    <form class="needs-validation" novalidate>
-      <div class="mb-3">
-        <label for="customer" class="form-label">Select Customer</label>
-        <select id="customer" name="customer" class="form-select select2" required>
-          <option value="">Select a customer</option>
-        </select>
-        <div class="invalid-feedback">Please select a customer.</div>
-      </div>
-      <div class="mb-3">
-        <label for="paymentType" class="form-label">Payment Type</label>
-        <select id="paymentType" name="paymentType" class="form-select" required>
-          <option value="">Select type</option>
-          <option value="credit">Credit (Receive from Customer)</option>
-          <option value="debit">Debit (Pay to Customer)</option>
-        </select>
-        <div class="invalid-feedback">Please select payment type.</div>
-      </div>
-      <div class="mb-3">
-        <label for="amount" class="form-label">Amount (₹)</label>
-        <input type="number" id="amount" name="amount" class="form-control" min="1" step="0.01" required placeholder="Enter amount">
-        <div class="invalid-feedback">Please enter a valid amount.</div>
-      </div>
-      <div class="mb-3">
-        <label for="date" class="form-label">Date</label>
-        <input type="date" id="date" name="date" class="form-control" required>
-        <div class="invalid-feedback">Please select a date.</div>
-      </div>
-      <div class="mb-3">
-        <label for="desc" class="form-label">Description (optional)</label>
-        <input type="text" id="desc" name="desc" class="form-control" maxlength="100" placeholder="Payment details">
-      </div>
-      <button type="submit" class="btn btn-primary w-100">Save Payment</button>
-    </form>
-  </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <script>
-    // Populate customer dropdown from server
-    let customers = parent.GetFromServer ? parent.GetFromServer("customers") : {};
-    customers = Object.keys(customers).map(key => ({ id: key, ...customers[key] }));
-    let options = '<option value="">Select a customer</option>';
-    customers.forEach(c => {
-      options += `<option value="${c.id}">${c.customerName} (${c.mobile1 || ''})</option>`;
-    });
-    document.getElementById('customer').innerHTML = options;
-    $('.select2').select2();
+    <div class="container">
+        <div class="row">
+            <!-- Left Section: Payment Box -->
+            <div class="col-md-6">
+                <div class="payment-box">
+                    <h3 class="mb-4 text-center">Add Payment</h3>
+                    <form class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="customer" class="form-label">Select Customer</label>
+                            <select id="customer" name="customer" class="form-select select2" required>
+                                <option value="">Select a customer</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a customer.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paymentType" class="form-label">Payment Type</label>
+                            <select id="paymentType" name="paymentType" class="form-select" required>
+                                <option value="">Select type</option>
+                                <option value="credit">Credit (Receive from Customer)</option>
+                                <option value="debit">Debit (Pay to Customer)</option>
+                            </select>
+                            <div class="invalid-feedback">Please select payment type.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount (₹)</label>
+                            <input type="number" id="amount" name="amount" class="form-control" min="1" step="0.01" required placeholder="Enter amount">
+                            <div class="invalid-feedback">Please enter a valid amount.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                            <div class="invalid-feedback">Please select a date.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paymentMode" class="form-label">Payment Mode</label>
+                            <select id="paymentMode" name="paymentMode" class="form-select" required>
+                                <option value="">Select payment mode</option>
+                                <option value="Cash" selected>Cash</option>
+                                <option value="NEFT">NEFT</option>
+                                <option value="RTGS">RTGS</option>
+                                <option value="UPI">UPI</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a payment mode.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="desc" class="form-label">Description (optional)</label>
+                            <input type="text" id="desc" name="desc" class="form-control" maxlength="100" placeholder="Payment details">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Save Payment</button>
+                    </form>
+                </div>
+            </div>
 
-    // Form validation and submit
-    document.querySelector('form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (!this.checkValidity()) {
-        this.classList.add('was-validated');
-        return;
-      }
-      const formData = new FormData(this);
-      const data = {
-        targetId: formData.get('customer'),
-        date: formData.get('date'),
-        desc: `Payment: ${formData.get('desc') || ''}`,
-        debit: formData.get('paymentType') === 'debit' ? formData.get('amount') : 0,
-        credit: formData.get('paymentType') === 'credit' ? formData.get('amount') : 0,
-        purchase: 0,
-        sell: 0
-      };
-      parent.Post2Server && parent.Post2Server(data, "transactions");
-      alert('Payment saved!');
-      this.reset();
-      this.classList.remove('was-validated');
-    });
-  </script>
+            <!-- Right Section: Customer Details -->
+            <div class="col-md-6">
+                <div class="payment-box">
+                    <h3 class="mb-4 text-center">Customer Ledger</h3>
+                    <div id="customer-details">
+                        <p class="text-muted text-center">Select a customer to view details</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        // Populate customer dropdown from server
+        let customers = parent.GetFromServer ? parent.GetFromServer("customers") : {};
+        customers = Object.keys(customers).map(key => ({ id: key, ...customers[key] }));
+        let options = '<option value="">Select a customer</option>';
+        customers.forEach(c => {
+            options += `<option value="${c.id}">${c.customerName} (${c.mobile1 || ''})</option>`;
+        });
+        document.getElementById('customer').innerHTML = options;
+        $('.select2').select2();
+
+        // Fetch and display customer ledger on selection
+        $('#customer').on('select2:select', async function (e) {
+            // Removed as customerId is now retrieved from e.params.data.id
+            const customerId = this.value;
+            const customerDetailsDiv = document.getElementById('customer-details');
+            if (!customerId) {
+                customerDetailsDiv.innerHTML = '<p class="text-muted text-center">Select a customer to view details</p>';
+                return;
+            }
+            customerDetailsDiv.innerHTML = '<p class="text-center">Loading...</p>';
+            try {
+                // Fetch customer ledger from server (mocked here)
+                const data = parent.GetFromServer('transactions');
+                let arrayData = Object.values(data);
+                let filteredData = filterJsonArray(arrayData, customerId,['targetId']);
+
+                let balance = 0, totalDebit = 0, totalCredit = 0; totalPurchase = 0, totalSell = 0;
+
+                filteredData.forEach(txn => {
+                    balance += (parseFloat(txn.debit) || 0) - (parseFloat(txn.credit) || 0);
+                    balance += (parseFloat(txn.sell) || 0) - (parseFloat(txn.purchase) || 0);
+                    totalDebit += parseFloat(txn.debit) || 0;
+                    totalCredit += parseFloat(txn.credit) || 0;
+                    totalPurchase += parseFloat(txn.purchase) || 0;
+                    totalSell += parseFloat(txn.sell) || 0;
+                });
+
+                customerDetailsDiv.innerHTML = `
+                    <div class="text-center">
+                        <p><strong>Total Debit:</strong> ₹${totalDebit.toFixed(2)}</p>
+                        <p><strong>Total Credit:</strong> ₹${totalCredit.toFixed(2)}</p>
+                        <p><strong>Total Purchase:</strong> ₹${totalPurchase.toFixed(2)}</p>
+                        <p><strong>Total Sell:</strong> ₹${totalSell.toFixed(2)}</p>
+                        <p><strong>Balance:</strong> <span style="color: ${balance < 0 ? 'red' : 'green'};">₹${balance.toFixed(2)}</span></p>
+                        <p><strong>Balance (in words):</strong> <span>${numberToWords(Math.abs(balance))} Rupees</span></p>
+                    </div>`;
+            } catch (error) {
+                customerDetailsDiv.innerHTML = '<p class="text-danger text-center">Failed to load customer ledger.</p>';
+                console.error('Error fetching customer ledger:', error);
+            }
+        });
+
+        // Mock function to fetch customer ledger from Firebase
+        async function fetchCustomerLedger(customerId) {
+            // Replace with actual Firebase call
+            return parent.GetFromServer ? parent.GetFromServer(`ledger/${customerId}`) : [];
+        }
+
+        // Form validation and submit
+        document.querySelector('form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!this.checkValidity()) {
+                this.classList.add('was-validated');
+                return;
+            }
+            const formData = new FormData(this);
+            const data = {
+                targetId: formData.get('customer'),
+                date: formData.get('date'),
+                desc: `Payment: ${formData.get('desc') || ''}`,
+                debit: formData.get('paymentType') === 'debit' ? formData.get('amount') : 0,
+                credit: formData.get('paymentType') === 'credit' ? formData.get('amount') : 0,
+                purchase: 0,
+                sell: 0,
+                paymentMode: formData.get('paymentMode')
+            };
+            parent.Post2Server && parent.Post2Server(data, "transactions");
+            alert('Payment saved!');
+            this.reset();
+            this.classList.remove('was-validated');
+            parent.closeFrameTill(1);
+        });
+    </script>
 </body>
 </html>

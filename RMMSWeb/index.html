@@ -22,189 +22,13 @@
     <link href="css/style.css" rel="stylesheet" />
     <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"
+    integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body style="overflow-y: hidden; background-image: url('content/images/vectorstock_bg.png');background-size:cover">
-    <style>
-        .Z0 {
-            z-index: 0;
-        }
-
-        .Z5 {
-            z-index: 5;
-        }
-
-        .Z10 {
-            z-index: 10;
-        }
-
-        .Z15 {
-            z-index: 15;
-        }
-
-        .Z20 {
-            z-index: 20;
-        }
-
-        .Z1001 {
-            z-index: 1001;
-        }
-
-        .Z1002 {
-            z-index: 1002;
-        }
-
-        body {
-            font-family: 'Roboto', serif;
-            font-size: 24px;
-        }
-
-        .moveTop {
-            z-index: 5001 !important;
-        }
-
-        .startMenuShow {
-            display: normal;
-            z-index: 100001;
-            border-radius: 8px;
-            width: 400px;
-            height: 400px;
-            left: 25px;
-            background-color: #f3f3f3;
-            border: 2px solid black;
-            position: absolute;
-            animation-name: startShow;
-            animation-duration: 1s;
-            animation-delay: 0s;
-            animation-fill-mode: both;
-        }
-
-        .startMenuHide {
-            display: normal;
-            z-index: 100001;
-            border-radius: 6px;
-            width: 400px;
-            height: 400px;
-            left: 25px;
-            background-color: #f3f3f3;
-            border: 2px solid black;
-            position: absolute;
-            animation-name: startHide;
-            animation-duration: 1s;
-            animation-delay: 0s;
-            animation-fill-mode: both;
-        }
-
-        @keyframes startShow {
-            from {
-                bottom: -600px;
-            }
-
-            to {
-                bottom: 60px;
-            }
-        }
-
-        @keyframes startHide {
-            from {
-                bottom: 60px;
-            }
-
-            to {
-                bottom: -600px;
-            }
-        }
-
-        .btnGroup {
-            display: inline-block;
-            margin-left: 20px;
-        }
-
-        .startMenuButton {
-            display: block;
-            width: 100%;
-            margin: 0px;
-            border: none;
-            padding: 5px;
-        }
-
-        startMenuButton:not(:last-child) {}
-
-        .ui-dialog {
-            z-index: 1000 !important;
-        }
-
-        .ui-dialog-title {
-            color: #FFFFFF !important;
-        }
-
-        #maskLayout {
-            display: none;
-            width: 100%;
-            height: 100%;
-            opacity: 0.2;
-            min-height: 500px;
-            background-color: black;
-            position: absolute;
-            top: 0px;
-            z-index: 99999;
-        }
-
-        .popup {
-            display: none;
-            position: absolute;
-            top: 20%;
-            left: 20%;
-            background-color: white;
-            z-index: 100000;
-        }
-
-        .shadow {
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-        }
-
-        .backgrd {}
-
-        .button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 0px 0px;
-            cursor: pointer;
-        }
-
-        .button1 {
-            border-radius: 2px;
-        }
-
-        .button2 {
-            border-radius: 4px;
-        }
-
-        .button3 {
-            border-radius: 8px;
-        }
-
-        .button4 {
-            border-radius: 12px;
-        }
-
-        .button5 {
-            border-radius: 50%;
-        }
-    </style>
-    <!--
-    The key to the frames display is to manage the z-index values. the algorithm for z-index values will be as follows
-        the z-index layer for popups will be between 40000-49999
-        the 1st frame will launch at 40000 and then each subsequent popup will be shown at the value of last
-        shown z-index +1.
-
-    -->
+    
     <div id="WebDesktop" style="display:normal">
         <div id="addcustomer" style="width: 80px;position: fixed; top: 50px; left: 50px; color: white">
             <div style="width:100%;"><i class="bi bi-people" style="font-size:2rem; margin-bottom: 0;"
@@ -268,46 +92,7 @@
             return myDevice.GenerateUUID();
         }
 
-        /// cachedVar
-        let cachedVar = {};
-        cachedVar.id = 25;
-
-        function getCachedVar() {
-            return cachedVar;
-        }
-
-        function setCachedVar(cachedvar) {
-            cachedVar = cachedvar;
-        }
-
-        //member aka customer profile
-        //initialize as null;
-        stateManager.customerProfile = null;
-
-        function getCustomerProfile() {
-            return stateManager.customerProfile;
-        }
-        function setCustomerProfile(customerProfile) {
-            stateManager.customerProfile = JSON.parse(customerProfile);
-            setUserProfileFunctionality();
-        }
-
-        //set funct for parsing the json
-        function setUserProfileFunctionality() {
-            //object properties
-            //    public Int64 Id { set; get; } = 0;
-            //    public string FirstName { set; get; } = string.Empty;
-            //    public string LastName { set; get; } = string.Empty;
-            //    public string Email { set; get; } = string.Empty;
-            //    public string Password { set; get; } = string.Empty;
-            //    public Int16 Age { set; get; } = 0;
-            //    public string Focus { set; get; } = string.Empty;
-            //    public string Description { set; get; } = string.Empty;
-            //    public string jTag { set; get; } = string.Empty;
-            $('#WebDesktop').show();
-        }
-        stateManager.keys = {};
-        stateManager.keys.customerProfile = 'customerProfile';
+        
 
         function GetFromServer(endpoint) {
             let url = `https://rmmswebapi.onrender.com/api/${endpoint}`;
@@ -327,6 +112,7 @@
             });
             return result;
         }
+
         function Post2Server(data, endpoint) {
             let url = `https://rmmswebapi.onrender.com/api/${endpoint}`;
             let result = null;
@@ -447,17 +233,6 @@
 
         })
 
-
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"
-        integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script language="javascript">
-        $(document).ready(function () {
-            //$("#frameDiv").draggable();
-            //$("#frameDiv1").draggable();
-        });
         function changeZIndex(frame) {
             $("#" + frame).css('z-index', getNewTopFrameZIndex());
         }
@@ -483,9 +258,9 @@
 
             ///// create a button in minimize taskbar
             let abbreviatedTitle = (newFrame.title.length > 15) ? `${newFrame.title.substring(0, 12)}...` : newFrame.title;
-            $('#minimizeBar').append(`<button onclick="$('#${newFrame.id}').show();" style="margin-top:5px; background-color: #f3f3f3" class="button button3" id="btn_${newFrame.id}"><i style="color:black" class="${newFrame.iconClass}"></i></button>`)
+            //$('#minimizeBar').append(`<button onclick="$('#${newFrame.id}').show();" style="margin-top:5px; background-color: #f3f3f3" class="button button3" id="btn_${newFrame.id}"><i style="color:black" class="${newFrame.iconClass}"></i></button>`)
             $(`#${newFrame.id}`).show();
-            $(`#${newFrame.id}`).draggable();
+            //$(`#${newFrame.id}`).draggable();
             setTimeout(function () {
                 $('#iframe_' + newFrame.id).attr('src', newFrame.src)
             }, 1000);
@@ -535,10 +310,21 @@
 
         function closeFrame(frame) {
             $(`#${frame}`).remove();
-            $('#btn_' + frame).hide();
-            $('#btn_' + frame).remove();
-            $('#btn_' + frame).button("destroy");
 
+        }
+
+        function closeFrameTill(depth){
+            let topframeid = getTopFrameZIndex()-(depth-1);
+            for (let i = 0; i < depth; i++) {
+                let topFrame = stateManager.windowPanesCollection.find(x => x.zindex === topframeid);
+                if (topFrame) {
+                    $(`#${topFrame.id}`).remove();
+                    stateManager.windowPanesCollection = stateManager.windowPanesCollection.filter(x => x.id !== topFrame.id);
+                    topframeid--;
+                } else {
+                    break;
+                }
+            }
         }
     </script>
 </body>

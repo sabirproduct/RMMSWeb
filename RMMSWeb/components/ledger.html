@@ -94,7 +94,7 @@
 
     const row = `<tr>
       <td>${txn.date}</td>
-      <td>${txn.desc}</td>
+      <td>${txn.desc}${txn.paymentMode ? ` (${txn.paymentMode})` : ''}</td>
       <td>${txn.sell == 0 ? '' : `₹${txn.sell}`}</td>
       <td>${txn.purchase == 0 ? '' : `₹${txn.purchase}`}</td>
       <td>${txn.debit == 0 ? '' : `₹${txn.debit}`}</td>
