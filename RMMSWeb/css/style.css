@@ -3,6 +3,14 @@
     padding: 0;
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
 body{
     /* background-image: url('bg.jpeg'); 
     background-size: cover; */
@@ -218,4 +226,17 @@ startMenuButton:not(:last-child) {
     border-radius: 50%;
 }
 
-  
+
+@media (max-width: 600px) {
+  .popup {
+    top: 0 !important;
+    left: 0 !important;
+    margin: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+

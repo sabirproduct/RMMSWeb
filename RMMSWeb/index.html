@@ -248,6 +248,9 @@
         function createFrame(FrameObject) {
             let newFrame = new Frame(FrameObject);
             $('body').append(newFrame.injectableCode);
+            if (window.innerWidth < 600) {
+                $("#" + newFrame.id).css({ top: 0, left: 0 });
+            }
 
             // Dialog message
             let selectedColor = '#7E7E7E';

@@ -28,7 +28,6 @@
 </head>
 <body class="bg-light">
 
-<div class="container">
   <div class="ledger-box" id="ledgerContent">
     <div class="mb-3">
       <strong>Name:</strong> <span id="custName"></span><br>
@@ -68,7 +67,6 @@
     <button class="btn btn-primary me-2" onclick="printLedger()">🖨️ Print</button>
     <button class="btn btn-success" onclick="downloadPDF()">📄 Download PDF</button>
   </div>
-</div>
 
 <script>
   var customerData = JSON.parse(atob(window.location.search.substring(1).split('=')[1]));

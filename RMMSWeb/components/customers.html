@@ -165,7 +165,6 @@
             const cells = row.querySelectorAll('td');
 
             let decryptedValues = JSON.parse(atob(originalValues));
-            console.log(decryptedValues);
             // Restore original values
             decryptedValues.forEach((value, index) => {
                 if (cells[index]) {
